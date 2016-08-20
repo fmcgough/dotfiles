@@ -92,3 +92,9 @@ alias st="git status"
 alias killsteam='ps aux | grep steam | grep -v grep |  tr -s " " | cut -d " " -f 2 | xargs kill -9'
 
 export PATH=/home/frankie/bin:$PATH
+
+if [[ "$COLORTERM" == "xfce4-terminal" ]]; then
+	export TERM=xterm-256color
+fi
+
+
