@@ -1,1 +1,0 @@
-/home/frankie/.oh-my-zsh/custom/themes/frankie.zsh-theme
