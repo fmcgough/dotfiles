@@ -22,3 +22,5 @@ set smartcase
 " Display line numbers on the left
 set number
 
+colorscheme lucius
+LuciusWhiteLowContrast
