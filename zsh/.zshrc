@@ -49,11 +49,11 @@ ZSH_THEME="frankie"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git rust)
 
 # User configuration
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -93,8 +93,14 @@ alias killsteam='ps aux | grep steam | grep -v grep |  tr -s " " | cut -d " " -f
 
 export PATH=/home/frankie/bin:$PATH
 
-if [[ "$COLORTERM" == "xfce4-terminal" ]]; then
-	export TERM=xterm-256color
+local parent="$(ps -p $PPID -o args h)"
+export TERM=xterm-256color
+
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+        source /etc/profile.d/vte.sh
 fi
 
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+source ~/.cargo/env
