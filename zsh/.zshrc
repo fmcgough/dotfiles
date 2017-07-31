@@ -91,6 +91,8 @@ alias st="git status"
 
 alias killsteam='ps aux | grep steam | grep -v grep |  tr -s " " | cut -d " " -f 2 | xargs kill -9'
 
+alias alu="apt list --upgradable"
+
 export PATH=/home/frankie/bin:$PATH
 
 local parent="$(ps -p $PPID -o args h)"
@@ -104,3 +106,6 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 source ~/.cargo/env
+
+PATH="/home/frankie/perl5/bin${PATH:+:${PATH}}"; export PATH;
+

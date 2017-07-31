@@ -1,0 +1,101 @@
+" You can enable the existing layers in space-vim and
+" exclude the partial plugins in a certain layer.
+" The command Layer is vaild in the function Layers().
+" Use exclude option if you don't want the full Layer,
+" e.g., Layer 'better-defaults', { 'exclude': 'itchyny/vim-cursorword' }
+function! Layers()
+
+    " Default layers, recommended!
+    Layer 'fzf'
+    Layer 'unite'
+    Layer 'better-defaults', { 'exclude': 'dominikduda/vim_current_word' }
+
+    Layer 'better-motion'
+    Layer 'file-manager'
+    Layer 'airline'
+    Layer 'tmux'
+    Layer 'programming'
+    Layer 'editing'
+    Layer 'git'
+    Layer 'auto-completion'
+    Layer 'ycmd'
+    Layer 'syntax-checking'
+
+endfunction
+
+" Put your private plugins here, e.g., change the colorscheme.
+function! UserInit()
+
+    " Space has been set as the default leader key,
+    " Comma has been set at the default localleader key.
+    " If you want to change it, uncomment and set it here.
+    " let g:spacevim_leader = "your leader key"
+    " let g:spacevim_localleader = 'your localleader key'
+
+    " Install private plugins
+    Plug 'NLKNguyen/papercolor-theme'
+    Plug 'reedes/vim-colors-pencil'
+
+    Plug 'hecal3/vim-leader-guide'
+    Plug 'tpope/vim-repeat'
+
+    Plug 'Rykka/colorv.vim'
+    Plug 'chrisbra/Colorizer'
+
+endfunction
+
+" Override the existing configurations and add extras here.
+function! UserConfig()
+    set termguicolors
+
+    " If you use vim inside tmux, see https://github.com/vim/vim/issues/993
+    " set Vim-specific sequences for RGB colors
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+    " Colour scheme
+    set background=light
+    color PaperColor
+    hi LineNr ctermbg=253 guibg=#dadada
+    hi SignColumn ctermbg=253 guibg=#dadada
+
+
+    " airline config
+    let g:airline_theme = 'pencil'
+    let g:airline_powerline_fonts = 1
+    let g:airline#extensions#hunks#enabled = 0
+    let g:airline_skip_empty_sections = 1
+    nnoremap <leader>ta :AirlineToggle<CR>
+
+    " Reduce delay when hitting Esc to enter normal mode
+    set timeoutlen=500
+    set ttimeout
+    set ttimeoutlen=10
+
+    " tab config
+    set tabstop=2
+    set softtabstop=2
+    set expandtab
+
+    " sensible behaviour for Files
+    nnoremap <leader>ff :Files<CR>
+    nnoremap <leader>f~ :Files ~<CR>
+
+    " Leader guide
+    let g:lmap = get(g:, 'lmap', {})
+    let g:lmap.b = { "name": "Buffers" }
+    let g:lmap.f = { "name": "Files" }
+    let g:lmap.w = { "name": "Windows" }
+    let g:lmap.m = { "name": "Tmux" }
+    let g:lmap.g = { "name": "Git" }
+    let g:lmap.h = { "name": "GitGutter" }
+    call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
+    nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
+    vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
+
+    let g:llmap = get(g:, 'llmap', {})
+    call leaderGuide#register_prefix_descriptions(",", "g:llmap")
+    nnoremap <localleader> :<c-u>LeaderGuide  ','<CR>
+    vnoremap <localleader> :<c-u>LeaderGuideVisual  ','<CR>
+
+endfunction

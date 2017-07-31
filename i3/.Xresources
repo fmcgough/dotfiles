@@ -1,0 +1,86 @@
+! PaperColor Theme
+#define S_foreground #4d4d4c
+#define S_background  #eeeeee
+#define S_color0   #ededed
+#define S_color8  #969694
+#define S_color1   #d7005f
+#define S_color9  #d7005f
+#define S_color2   #718c00
+#define S_color10   #718c00
+#define S_color3   #d75f00
+#define S_color11   #d75f00
+#define S_color4   #4271ae
+#define S_color12   #4271ae
+#define S_color5   #8959a8
+#define S_color13   #8959a8
+#define S_color6   #3e999f
+#define S_color14   #3e999f
+#define S_color7   #4d4d4c
+#define S_color15   #f5f5f5
+
+
+!special
+*foreground:   S_foreground
+*background:   S_background
+*cursorColor:  S_foreground
+
+!black
+*color0:       S_color0
+*color8:       S_color8
+
+!red
+*color1:       S_color1
+*color9:       S_color9
+
+!green
+*color2:       S_color2
+*color10:      S_color10
+
+!yellow
+*color3:       S_color3
+*color11:      S_color11
+
+!blue
+*color4:       S_color4
+*color12:      S_color12
+
+!magenta
+*color5:       S_color5
+*color13:      S_color13
+
+!cyan
+*color6:       S_color6
+*color14:      S_color14
+
+!white
+*color7:       S_color7
+*color15:      S_color15
+! ------------------------------------------------------------------------------
+! ROFI Color theme
+! Copyright: 2017 leofa
+! ------------------------------------------------------------------------------
+! "Color scheme for normal row" Set from: File
+rofi.color-normal:                   S_background, S_foreground, S_color15, S_color6, S_color15
+! "Color scheme for urgent row" Set from: File
+rofi.color-urgent:                   S_color8, S_color15, S_color7, S_color1, S_color15
+! "Color scheme for active row" Set from: File
+rofi.color-active:                   S_background, S_color5, S_color15, S_color5, S_color15
+! "Color scheme window" Set from: File
+rofi.color-window:                   S_background, S_background
+! "Separator style (none, dash, solid)" Set from: XResources
+rofi.separator-style:                none
+
+!! ---------------------------- ROFI -------------------------------
+!rofi.color-enabled: true
+!! State:				  bg					fg					bgalt				hlbg			hlfg
+!rofi.color-window:  S_background,	S_background
+!rofi.color-normal:  S_background, 	S_foreground,	S_background,	S_color10,	S_foreground
+!rofi.color-active:  S_background, 	S_foreground,	S_background,	S_color10,	S_foreground
+!rofi.color-urgent:  S_background, 	S_foreground,	S_background,	S_color10,	S_foreground
+!rofi.opacity: 87.5
+!rofi.font: Fantasque Sans Mono 13
+!rofi.dpi: 170
+!rofi.location: 1
+!!rofi.yoffset: 40
+!rofi.xoffset: 0
+!!rofi.width: 2880

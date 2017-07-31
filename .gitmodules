@@ -1,0 +1,3 @@
+[submodule "spacevim/.space-vim"]
+	path = spacevim/.space-vim
+	url = git@github.com:liuchengxu/space-vim.git
