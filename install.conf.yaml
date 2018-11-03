@@ -12,4 +12,7 @@
     ~/workspace/i3blocks-contrib/:
       path: 'i3blocks-contrib/*'
       glob: true
+    ~/.tmux/plugins/tpm/:
+      path: 'tpm/*'
+      glob: true
 
