@@ -1,0 +1,15 @@
+- defaults:
+    link:
+      relink: true
+      create: true
+
+- link:
+    ~/.tmux.conf:
+    ~/.i3blocks.conf:
+    ~/.config/dunst/dunstrc: dunstrc
+    ~/.config/i3/config: i3-config
+    ~/.spacevim:
+    ~/workspace/i3blocks-contrib/:
+      path: 'i3blocks-contrib/*'
+      glob: true
+

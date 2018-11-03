@@ -1,3 +1,9 @@
-[submodule "spacevim/.space-vim"]
-	path = spacevim/.space-vim
+[submodule "space-vim"]
+	path = space-vim
 	url = git@github.com:liuchengxu/space-vim.git
+[submodule "dotbot"]
+	path = dotbot
+	url = git@github.com:anishathalye/dotbot.git
+[submodule "i3blocks-contrib"]
+	path = i3blocks-contrib
+	url = git@github.com:vivien/i3blocks-contrib.git
