@@ -15,4 +15,5 @@
     ~/.tmux/plugins/tpm/:
       path: 'tpm/*'
       glob: true
+    ~/.config/rofi/config: rofi-config
 
