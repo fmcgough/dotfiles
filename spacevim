@@ -52,7 +52,12 @@ function! UserInit()
     Plug 'fszymanski/deoplete-emoji', { 'do': ':UpdateRemotePlugins' }
     Plug 'alvan/vim-closetag'
 
-    Plug 'neoclide/coc.nvim', { 'do': { -> coc#util#install() } }
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' } " { 'do': { -> coc#util#install() } }
+    Plug 'ckipp01/coc-metals', {'do': 'yarn install --frozen-lockfile'}
+
+    if has('macunix')
+      Plug 'rizzatti/dash.vim'
+    endif
 
 endfunction
 
@@ -87,6 +92,7 @@ function! UserConfig()
     endif
     let g:airline_symbols.notexists = '★'
     nnoremap <leader>ta :AirlineToggle<CR>
+    let g:airline#extensions#coc#enabled = 1
 
     nnoremap <leader>ff :Files<CR>
     nnoremap <leader>f~ :Files ~<CR>
@@ -129,14 +135,39 @@ function! UserConfig()
     nnoremap <leader>tr :RainbowToggle<CR>
     let g:AutoPairsMultilineClose = 0
 
+    " Allow mouse in all modes
+    set mouse=a
+    " Single click to expand directories, double click to open files
+    let NERDTreeMouseMode = 2
+    let g:NERDTreeWinSize = 45
     let g:NERDDefaultAlign = 'left'
     let g:NERDTreeMapOpenSplit = 's'
     let g:NERDTreeMapOpenVSplit = 'v'
+    let g:NERDCreateDefaultMappings = 0
 
     let $FZF_DEFAULT_COMMAND = 'rg -l ""'
-    let g:fzf_colors.fg = ['fg', 'Comment']
+
+    if !exists('g:fzf_colors')
+      let g:fzf_colors = {
+          \ 'fg':      ['fg', 'Normal'],
+          \ 'bg':      ['bg', 'CursorLine', 'CursorColumn'],
+          \ 'hl':      ['fg', 'Comment'],
+          \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+          \ 'bg+':     ['bg', 'Normal'],
+          \ 'hl+':     ['fg', 'Statement'],
+          \ 'info':    ['fg', 'PreProc'],
+          \ 'border':  ['fg', 'Ignore'],
+          \ 'prompt':  ['fg', 'Conditional'],
+          \ 'pointer': ['fg', 'Exception'],
+          \ 'marker':  ['fg', 'Keyword'],
+          \ 'spinner': ['fg', 'Label'],
+          \ 'header':  ['fg', 'Comment'] 
+          \ }
+      let g:fzf_colors.fg = ['fg', 'Comment']
+    endif
 
     nnoremap <Tab> :bn<CR>
+    nnoremap <S-Tab> :bp<CR>
 
     " Close a buffer without closing the previous window
     nnoremap <leader>bx :bp<bar>sp<bar>bn<bar>bd<CR>
@@ -154,6 +185,13 @@ function! UserConfig()
     let g:formatters_jsx = ['prettier']
     let g:formatdef_prettier = "'prettier --stdin --parser babel --config `find . -maxdepth 2 -name prettier.config.js `'"
 
-    let g:NERDTReeWinSize = 45
+    nmap <silent> <leader>da <Plug>DashSearch
+    nmap <silent> <leader>dg <Plug>DashGlobalSearch
+
+    let g:dash_map = {
+      \ 'scala': 'java',
+      \ }
+
+    " let g:spacevim#map#leader#desc['c'] = { 'name': 'coc-nvim' }
 
 endfunction
