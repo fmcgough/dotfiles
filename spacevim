@@ -149,7 +149,7 @@ function! UserConfig()
 
     if !exists('g:fzf_colors')
       let g:fzf_colors = {
-          \ 'fg':      ['fg', 'Normal'],
+          \ 'fg':      ['fg', 'Comment'],
           \ 'bg':      ['bg', 'CursorLine', 'CursorColumn'],
           \ 'hl':      ['fg', 'Comment'],
           \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
@@ -161,9 +161,8 @@ function! UserConfig()
           \ 'pointer': ['fg', 'Exception'],
           \ 'marker':  ['fg', 'Keyword'],
           \ 'spinner': ['fg', 'Label'],
-          \ 'header':  ['fg', 'Comment'] 
+          \ 'header':  ['fg', 'Comment']
           \ }
-      let g:fzf_colors.fg = ['fg', 'Comment']
     endif
 
     nnoremap <Tab> :bn<CR>
