@@ -32,10 +32,6 @@ let g:spacevim_excluded = [
       \ 'terryma/vim-multiple-cursors',
       \ ]
 
-if has('nvim')
-    Layer 'syntax-checking'
-endif
-
 " Put your private plugins here.
 function! UserInit()
 
