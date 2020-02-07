@@ -4,11 +4,8 @@
 
 let g:spacevim_layers = [
       \ 'fzf',
-      \ 'unite',
       \ 'better-defaults',
-      \ 'better-motion',
       \ 'editing',
-      \ 'file-manager',
       \ 'markdown',
       \ 'tmux',
       \ 'airline',
@@ -17,15 +14,23 @@ let g:spacevim_layers = [
       \ 'python',
       \ 'scala',
       \ 'text-align',
-      \ 'games',
       \ 'javascript',
       \ 'typescript',
-      \ 'deoplete',
       \ 'which-key',
       \ 'lsp',
       \ 'formatting',
       \ ]
 
+
+let g:spacevim_excluded = [
+      \ 'dominikduda/vim_current_word',
+      \ 'tpope/vim-rsi',
+      \ 'junegunn/rainbow_parentheses.vim',
+      \ 'luochen1990/rainbow',
+      \ 'matze/vim-move',
+      \ 'pelodelfuego/vim-swoop',
+      \ 'terryma/vim-multiple-cursors',
+      \ ]
 
 if has('nvim')
     Layer 'syntax-checking'
@@ -53,7 +58,6 @@ function! UserInit()
     Plug 'alvan/vim-closetag'
 
     Plug 'neoclide/coc.nvim', { 'branch': 'release' } " { 'do': { -> coc#util#install() } }
-    Plug 'ckipp01/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 
     if has('macunix')
       Plug 'rizzatti/dash.vim'
@@ -76,9 +80,6 @@ function! UserConfig()
     let g:spacevim_lsp_engine = 'coc'
 
     let g:scala_sort_across_groups=1
-
-    let g:vim_current_word#enabled = 0
-    let g:vim_current_word#highlight_current_word = 0
 
     " If you enable airline layer and have installed the powerline fonts, set it here.
     let g:airline_powerline_fonts=1
@@ -116,8 +117,6 @@ function! UserConfig()
     highlight link SignifySignChangeDelete    SignifySignChange
     highlight link SignifySignDeleteFirstLine SignifySignDelete
 
-    let g:deoplete#omni#input_patterns = get(g:, 'deoplete#omni#input_patterns', {})
-
     set expandtab
     set tabstop=2
     set softtabstop=2
@@ -131,19 +130,10 @@ function! UserConfig()
     nnoremap <leader>wz <C-w>z
     autocmd FileType python setlocal textwidth=119
 
-    let g:rainbow_active = 0
-    nnoremap <leader>tr :RainbowToggle<CR>
     let g:AutoPairsMultilineClose = 0
 
     " Allow mouse in all modes
     set mouse=a
-    " Single click to expand directories, double click to open files
-    let NERDTreeMouseMode = 2
-    let g:NERDTreeWinSize = 45
-    let g:NERDDefaultAlign = 'left'
-    let g:NERDTreeMapOpenSplit = 's'
-    let g:NERDTreeMapOpenVSplit = 'v'
-    let g:NERDCreateDefaultMappings = 0
 
     let $FZF_DEFAULT_COMMAND = 'rg -l ""'
 
@@ -192,5 +182,13 @@ function! UserConfig()
       \ }
 
     " let g:spacevim#map#leader#desc['c'] = { 'name': 'coc-nvim' }
+
+    let g:coc_global_extensions = [
+          \ 'coc-json',
+          \ 'coc-metals',
+          \ 'coc-highlight',
+          \ 'coc-explorer'
+          \ ]
+    nnoremap <silent> <leader>ee :CocCommand explorer<CR>
 
 endfunction
