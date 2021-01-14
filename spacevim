@@ -30,6 +30,7 @@ let g:spacevim_excluded = [
       \ 'matze/vim-move',
       \ 'pelodelfuego/vim-swoop',
       \ 'terryma/vim-multiple-cursors',
+      \ 'autozimu/LanguageClient-neovim',
       \ ]
 
 " Put your private plugins here.
@@ -186,5 +187,26 @@ function! UserConfig()
           \ 'coc-explorer'
           \ ]
     nnoremap <silent> <leader>ee :CocCommand explorer<CR>
+    nnoremap <silent> <leader>lc :CocCommand<CR>
+    nnoremap <silent> <leader>ll :CocList<CR>
+    nnoremap <silent> [l :CocPrev<CR>
+    nnoremap <silent> ]l :CocNext<CR>
+    " Remap for rename current word
+    nnoremap <silent> <leader>ln <Plug>(coc-rename)
 
+    " Remap keys for gotos
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+
+    " Toggle panel with Tree Views
+    nnoremap <silent> <space>tt :<C-u>CocCommand metals.tvp<CR>
+    " Toggle Tree View 'metalsPackages'
+    nnoremap <silent> <space>tk :<C-u>CocCommand metals.tvp metalsPackages<CR>
+    " Toggle Tree View 'metalsCompile'
+    nnoremap <silent> <space>tc :<C-u>CocCommand metals.tvp metalsCompile<CR>
+    " Toggle Tree View 'metalsBuild'
+    nnoremap <silent> <space>tb :<C-u>CocCommand metals.tvp metalsBuild<CR>
+    " Reveal current current class (trait or object) in Tree View 'metalsPackages'
+    nnoremap <silent> <space>tf :<C-u>CocCommand metals.revealInTreeView metalsPackages<CR>
 endfunction
