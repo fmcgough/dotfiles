@@ -1,3 +1,4 @@
+" vim: set syntax=vim ft=vim :
 " You can enable the existing layers in space-vim and
 " exclude the partial plugins in a certain layer.
 " Use exclude option if you don't want the full Layer
@@ -108,11 +109,11 @@ function! UserConfig()
     colorscheme PaperColor
 
     highlight SignColumn ctermbg=253 guibg=#dadada
-    highlight link SignifySignAdd             DiffAdd
-    highlight link SignifySignChange          DiffChange
-    highlight link SignifySignDelete          DiffDelete
-    highlight link SignifySignChangeDelete    SignifySignChange
-    highlight link SignifySignDeleteFirstLine SignifySignDelete
+    highlight! link SignifySignAdd             DiffAdd
+    highlight! link SignifySignChange          DiffChange
+    highlight! link SignifySignDelete          DiffDelete
+    highlight! link SignifySignChangeDelete    SignifySignChange
+    highlight! link SignifySignDeleteFirstLine SignifySignDelete
 
     set expandtab
     set tabstop=2
