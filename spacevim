@@ -57,9 +57,8 @@ function! UserInit()
 
     Plug 'neoclide/coc.nvim', { 'branch': 'release' } " { 'do': { -> coc#util#install() } }
 
-    if has('macunix')
-      Plug 'rizzatti/dash.vim'
-    endif
+    Plug 'tpope/vim-dadbod'
+    Plug 'kristijanhusak/vim-dadbod-ui'
 
 endfunction
 
@@ -165,27 +164,12 @@ function! UserConfig()
     " Jenkinsfile syntax
     autocmd BufNewFile,BufRead *.jenkins set syntax=Jenkinsfile
 
-    let g:formatters_scala = ['scalafmt']
-    let g:formatdef_scalafmt = "'ng scalafmt --stdin'"
-
-    let g:formatters_javascript_jsx = ['prettier']
-    let g:formatters_jsx = ['prettier']
-    let g:formatdef_prettier = "'prettier --stdin --parser babel --config `find . -maxdepth 2 -name prettier.config.js `'"
-
-    nmap <silent> <leader>da <Plug>DashSearch
-    nmap <silent> <leader>dg <Plug>DashGlobalSearch
-
-    let g:dash_map = {
-      \ 'scala': 'java',
-      \ }
-
-    " let g:spacevim#map#leader#desc['c'] = { 'name': 'coc-nvim' }
-
     let g:coc_global_extensions = [
           \ 'coc-json',
           \ 'coc-metals',
           \ 'coc-highlight',
-          \ 'coc-explorer'
+          \ 'coc-explorer',
+          \ 'coc-prettier'
           \ ]
     nnoremap <silent> <leader>ee :CocCommand explorer<CR>
     nnoremap <silent> <leader>lc :CocCommand<CR>
@@ -239,4 +223,13 @@ function! UserConfig()
     nnoremap <silent> <space>tb :<C-u>CocCommand metals.tvp metalsBuild<CR>
     " Reveal current current class (trait or object) in Tree View 'metalsPackages'
     nnoremap <silent> <space>tf :<C-u>CocCommand metals.revealInTreeView metalsPackages<CR>
+
+    " Disable coc in git commits
+    autocmd FileType gitcommit let b:coc_enabled=0
+
+    nnoremap <silent> <space>du :DBUI <CR>
+    let g:db_ui_use_nerd_fonts = 1
+    let g:db_ui_winwidth = 50
+    let g:db_ui_win_position = 'right'
+
 endfunction
