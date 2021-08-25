@@ -34,6 +34,8 @@ lvim.keys.normal_mode["<S-Tab>"] = "<cmd>BufferPrevious<CR>"
 --   "<cmd>lua require'telescope'.extensions.project.project{}<CR>",
 --   "Projects"
 -- }
+lvim.builtin.which_key.mappings["q"] = { "<cmd>q<cr>", "Quit" }
+lvim.builtin.which_key.mappings["Q"] = { "<cmd>q<cr>", "Quit without saving" }
 lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers<cr>", "Find buffer" }
 lvim.builtin.which_key.mappings.b["d"] = { "<cmd>bdelete<cr>", "Delete buffer" }
 lvim.builtin.which_key.mappings["t"] = {
