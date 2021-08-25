@@ -9,6 +9,7 @@
     ~/.config/dunst/dunstrc: dunstrc
     ~/.config/i3/config: i3-config
     ~/.spacevim:
+    ~/.config/lvim/config.lua: config.lua
     ~/workspace/i3blocks-contrib/:
       path: 'i3blocks-contrib/*'
       glob: true
