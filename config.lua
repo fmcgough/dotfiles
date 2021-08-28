@@ -24,10 +24,17 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 -- lvim.keys.normal_mode["<C-Up>"] = ""
 -- edit a default keymapping
 -- lvim.keys.normal_mode["<C-q>"] = ":q<cr>"
-lvim.keys.normal_mode["<S-h>"] = "^"
-lvim.keys.normal_mode["<S-l>"] = "$"
-lvim.keys.normal_mode["<Tab>"] = "<cmd>BufferNext<CR>"
-lvim.keys.normal_mode["<S-Tab>"] = "<cmd>BufferPrevious<CR>"
+lvim.keys.normal_mode["<S-h>"] = ""
+lvim.keys.normal_mode["H"] = "^"
+lvim.keys.normal_mode["<S-l>"] = ""
+lvim.keys.normal_mode["L"] = "$"
+lvim.keys.normal_mode["<Tab>"] = "<cmd>BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-Tab>"] = "<cmd>BufferLineCyclePrev<CR>"
+-- mappings overridden by vim-tmux-navigator
+lvim.keys.normal_mode["<C-h>"] = ""
+lvim.keys.normal_mode["<C-j>"] = ""
+lvim.keys.normal_mode["<C-k>"] = ""
+lvim.keys.normal_mode["<C-l>"] = ""
 
 -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["P"] = {
@@ -54,22 +61,26 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 
+lvim.builtin.bufferline.active = false
+
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {}
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enable = true
 
-lvim.builtin.telescope.defaults.layout_config.prompt_position = 'top'
+lvim.builtin.telescope.defaults.layout_config.prompt_position = "top"
 lvim.builtin.telescope.defaults.sorting_strategy = "ascending"
 
-require("telescope").setup {
+-- lvim.builtin.galaxyline.active = false
+lvim.builtin.lualine.options.theme = "neon"
+
+require("telescope").setup({
   defaults = {
     -- Your defaults config goes in here
     theme = "dropdown",
     mappings = {
-      i = {
-      }
-    }
+      i = {},
+    },
   },
   pickers = {
     -- Your special builtin config goes in here
@@ -85,20 +96,21 @@ require("telescope").setup {
         },
         n = {
           ["<c-d>"] = require("telescope.actions").delete_buffer,
-        }
-      }
+        },
+      },
     },
     find_files = {
       -- theme = "dropdown"
     },
     oldfiles = {
       -- theme = "dropdown"
-    }
+    },
   },
   extensions = {
     -- Your extension config goes in here
-  }
-}
+  },
+})
+
 -- generic LSP settings
 -- disable highlighting reference under cursor
 lvim.lsp.document_highlight = false
@@ -113,6 +125,17 @@ lvim.lsp.document_highlight = false
 -- end
 
 -- set a formatter if you want to override the default lsp one (if it exists)
+lvim.lang.lua.formatters = {
+  {
+    exe = "stylua",
+    args = {
+      "--indent-type",
+      "Spaces",
+      "--indent-width",
+      "2",
+    },
+  },
+}
 -- lvim.lang.python.formatters = {
 --   {
 --     exe = "black",
@@ -147,24 +170,53 @@ lvim.plugins = {
   },
   {
     "folke/trouble.nvim",
-      cmd = "TroubleToggle",
+    cmd = "TroubleToggle",
   },
   {
     "norcalli/nvim-colorizer.lua",
-      config = function()
-        require("colorizer").setup({ "*" }, {
-            RGB = true, -- #RGB hex codes
-            RRGGBB = true, -- #RRGGBB hex codes
-            RRGGBBAA = true, -- #RRGGBBAA hex codes
-            rgb_fn = true, -- CSS rgb() and rgba() functions
-            hsl_fn = true, -- CSS hsl() and hsla() functions
-            css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-            css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
-            })
+    config = function()
+      require("colorizer").setup({ "*" }, {
+        RGB = true, -- #RGB hex codes
+        RRGGBB = true, -- #RRGGBB hex codes
+        RRGGBBAA = true, -- #RRGGBBAA hex codes
+        rgb_fn = true, -- CSS rgb() and rgba() functions
+        hsl_fn = true, -- CSS hsl() and hsla() functions
+        css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+        css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+      })
     end,
   },
   {
-    "rafamadriz/neon"
+    "rafamadriz/neon",
+  },
+  {
+    "akinsho/bufferline.nvim",
+    config = function()
+      require("bufferline").setup({
+        options = {
+          separator_style = "slant",
+          diagnostics = "nvim_lsp",
+          diagnostics_indicator = function(count, level)
+            local icon = level:match("error") and " " or level:match("warning") and " " or " "
+            return " " .. icon .. count
+          end,
+          offsets = {
+            {
+              filetype = "NvimTree",
+              text = function()
+                return vim.fn.getcwd()
+              end,
+              highlight = "Directory",
+              text_align = "left",
+            },
+          },
+          show_close_icon = false,
+        },
+      })
+    end,
+  },
+  {
+    "christoomey/vim-tmux-navigator",
   },
   -- {
   --   "folke/tokyonight.nvim"
