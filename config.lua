@@ -107,14 +107,13 @@ vim.g.PaperColor_Theme_Options = {
 --   let s:cyan    = {'t': s:ansi_colors ?   6 : (s:tty ? '6' : 37 ), 'g': '#20A5BA'}
 --   let s:green   = {'t': s:ansi_colors ?   2 : (s:tty ? '2' : 64 ), 'g': '#10A778'}
 
-
 if colorscheme == "PaperColor" then
-  vim.cmd [[ highlight SignColumn ctermbg=253 guibg=#dadada ]]
-  vim.cmd [[ highlight! link SignifySignAdd             DiffAdd]]
-  vim.cmd [[ highlight! link SignifySignChange          DiffChange ]]
-  vim.cmd [[ highlight! link SignifySignDelete          DiffDelete ]]
-  vim.cmd [[ highlight! link SignifySignChangeDelete    SignifySignChange ]]
-  vim.cmd [[ highlight! link SignifySignDeleteFirstLine SignifySignDelete ]]
+  vim.cmd([[ highlight SignColumn ctermbg=253 guibg=#dadada ]])
+  vim.cmd([[ highlight! link SignifySignAdd             DiffAdd]])
+  vim.cmd([[ highlight! link SignifySignChange          DiffChange ]])
+  vim.cmd([[ highlight! link SignifySignDelete          DiffDelete ]])
+  vim.cmd([[ highlight! link SignifySignChangeDelete    SignifySignChange ]])
+  vim.cmd([[ highlight! link SignifySignDeleteFirstLine SignifySignDelete ]])
 end
 
 -- }}}
@@ -151,6 +150,10 @@ lvim.builtin.which_key.mappings["Q"] = { "<cmd>q!<cr>", "Quit without saving" }
 lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers<cr>", "Find buffer" }
 lvim.builtin.which_key.mappings.b["d"] = { "<cmd>bdelete<cr>", "Delete buffer" }
 lvim.builtin.which_key.mappings.g["d"] = { "<cmd>Gvdiffsplit<cr>", "Git diff" }
+
+lvim.builtin.which_key.mappings.l["r"] = { "<cmd>lua vim.lsp.buf.references()<cr>", "Find references" }
+lvim.builtin.which_key.mappings.l["R"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" }
+
 lvim.builtin.which_key.mappings.g["w"] = { "<cmd>lua require'gitsigns'.toggle_word_diff()<cr>", "Toggle word diff" }
 lvim.builtin.which_key.mappings["t"] = {
   name = "+Trouble",
@@ -160,6 +163,7 @@ lvim.builtin.which_key.mappings["t"] = {
   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
 }
+lvim.builtin.which_key.mappings["m"] = { "<cmd>Telescope metals commands<cr>", "Metals commands" }
 -- }}}
 
 -- misc other builtin plugins {{{
@@ -308,6 +312,22 @@ lvim.lang.scala.formatters = {
 }
 lvim.lang.scala.linters = {}
 
+-- local util = require("metals.util")
+-- lvim.lang.scala.lsp.setup.cmd = { util.path.join(util.nvim_metals_cache_dir, "metals") }
+lvim.lang.scala.lsp.provider = nil
+
+Metals_config = require("metals").bare_config
+Metals_config.on_attach = function()
+  require("lsp").common_on_attach()
+end
+Metals_config.settings = {
+  showImplicitArguments = false,
+  showInferredType = true,
+  excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
+  serverProperties = {}
+}
+Metals_config.init_options.statusBarProvider = false
+
 -- lvim.lang.python.formatters = {
 --   {
 --     exe = "black",
@@ -325,6 +345,10 @@ lvim.lang.scala.linters = {}
 
 -- Additional Plugins {{{
 lvim.plugins = {
+
+  {
+    "scalameta/nvim-metals",
+  },
 
   {
     "tpope/vim-fugitive",
@@ -405,7 +429,13 @@ lvim.plugins = {
     "rafcamlet/nvim-luapad",
   },
   {
-    "rktjmp/lush.nvim"
+    "rktjmp/lush.nvim",
+  },
+  {
+    "kana/vim-textobj-user"
+  },
+  {
+    "Julian/vim-textobj-variable-segment"
   },
 
   -- themes
@@ -425,7 +455,7 @@ lvim.plugins = {
     "rafamadriz/neon",
   },
   {
-    "fmcgough/pencil-color.nvim"
+    "fmcgough/pencil-color.nvim",
   },
   -- {
   --   "projekt0n/github-nvim-theme",
@@ -447,9 +477,11 @@ lvim.plugins = {
 -- }}}
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- lvim.autocommands.custom_groups = {
---   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
--- }
+lvim.autocommands.custom_groups = {
+  -- { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
+  { "FileType", "scala", "setlocal omnifunc=v:lua.vim.lsp.omnifunc" },
+  { "FileType", "scala,sbt", "lua require('metals').initialize_or_attach(Metals_config)" },
+}
 
 -- Load the colorscheme at the end
 lvim.colorscheme = colorscheme
