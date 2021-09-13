@@ -147,7 +147,7 @@ lvim.keys.normal_mode["<C-l>"] = "<cmd>TmuxNavigateRight<cr>"
 -- }
 lvim.builtin.which_key.mappings["q"] = { "<cmd>q<cr>", "Quit" }
 lvim.builtin.which_key.mappings["Q"] = { "<cmd>q!<cr>", "Quit without saving" }
-lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers<cr>", "Find buffer" }
+lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers theme=get_dropdown<cr>", "Find buffer" }
 lvim.builtin.which_key.mappings.b["d"] = { "<cmd>bdelete<cr>", "Delete buffer" }
 lvim.builtin.which_key.mappings.g["d"] = { "<cmd>Gvdiffsplit<cr>", "Git diff" }
 
@@ -163,7 +163,7 @@ lvim.builtin.which_key.mappings["t"] = {
   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
 }
-lvim.builtin.which_key.mappings["m"] = { "<cmd>Telescope metals commands<cr>", "Metals commands" }
+lvim.builtin.which_key.mappings["m"] = { "<cmd>Telescope metals commands theme=get_dropdown<cr>", "Metals commands" }
 -- }}}
 
 -- misc other builtin plugins {{{
@@ -173,6 +173,10 @@ lvim.builtin.terminal.active = true
 
 lvim.builtin.telescope.defaults.layout_config.prompt_position = "top"
 lvim.builtin.telescope.defaults.sorting_strategy = "ascending"
+local telescope_mappings = require("telescope.mappings").default_mappings
+telescope_mappings.n["H"] = false
+telescope_mappings.n["L"] = false
+lvim.builtin.telescope.defaults.mappings = telescope_mappings
 
 lvim.builtin.lualine.style = "lvim"
 lvim.builtin.lualine.options.theme = "auto"
@@ -324,7 +328,7 @@ Metals_config.settings = {
   showImplicitArguments = false,
   showInferredType = true,
   excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
-  serverProperties = {}
+  serverProperties = {},
 }
 Metals_config.init_options.statusBarProvider = false
 
@@ -432,10 +436,10 @@ lvim.plugins = {
     "rktjmp/lush.nvim",
   },
   {
-    "kana/vim-textobj-user"
+    "kana/vim-textobj-user",
   },
   {
-    "Julian/vim-textobj-variable-segment"
+    "Julian/vim-textobj-variable-segment",
   },
 
   -- themes
