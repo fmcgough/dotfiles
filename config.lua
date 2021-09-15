@@ -147,7 +147,7 @@ lvim.keys.normal_mode["<C-l>"] = "<cmd>TmuxNavigateRight<cr>"
 -- }
 lvim.builtin.which_key.mappings["q"] = { "<cmd>q<cr>", "Quit" }
 lvim.builtin.which_key.mappings["Q"] = { "<cmd>q!<cr>", "Quit without saving" }
-lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers theme=get_dropdown<cr>", "Find buffer" }
+lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers<cr>", "Find buffer" }
 lvim.builtin.which_key.mappings.b["d"] = { "<cmd>bdelete<cr>", "Delete buffer" }
 lvim.builtin.which_key.mappings.g["d"] = { "<cmd>Gvdiffsplit<cr>", "Git diff" }
 
@@ -163,7 +163,10 @@ lvim.builtin.which_key.mappings["t"] = {
   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
 }
-lvim.builtin.which_key.mappings["m"] = { "<cmd>Telescope metals commands theme=get_dropdown<cr>", "Metals commands" }
+lvim.builtin.which_key.mappings["m"] = {
+  "<cmd>Telescope metals commands layout_config={height=0.4}<cr>",
+  "Metals commands",
+}
 -- }}}
 
 -- misc other builtin plugins {{{
@@ -250,6 +253,15 @@ require("telescope").setup({
     mappings = {
       i = {},
     },
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      -- "--smart-case",
+    },
   },
   pickers = {
     -- Your special builtin config goes in here
@@ -267,6 +279,9 @@ require("telescope").setup({
           ["<c-d>"] = require("telescope.actions").delete_buffer,
         },
       },
+      layout_config = {
+        height = 0.4
+      }
     },
     find_files = {
       -- theme = "dropdown"
@@ -305,6 +320,17 @@ lvim.lang.lua.formatters = {
       "--indent-width",
       "2",
     },
+  },
+}
+
+lvim.lang.typescript.formatters = {
+  {
+    exe = "prettier",
+  },
+}
+lvim.lang.javascript.formatters = {
+  {
+    exe = "prettier",
   },
 }
 
