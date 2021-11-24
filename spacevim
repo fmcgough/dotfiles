@@ -18,7 +18,6 @@ let g:spacevim_layers = [
       \ 'javascript',
       \ 'typescript',
       \ 'which-key',
-      \ 'lsp',
       \ 'formatting',
       \ ]
 
@@ -60,6 +59,10 @@ function! UserInit()
     Plug 'tpope/vim-dadbod'
     Plug 'kristijanhusak/vim-dadbod-ui'
 
+    Plug 'scalameta/nvim-metals'
+    Plug 'hrsh7th/vim-vsnip'
+    Plug 'hrsh7th/nvim-compe'
+
 endfunction
 
 " Put your costom configurations here, e.g., change the colorscheme.
@@ -74,7 +77,7 @@ function! UserConfig()
     endif
 
     Layer 'scala-extra'
-    let g:spacevim_lsp_engine = 'coc'
+    " let g:spacevim_lsp_engine = 'coc'
 
     let g:scala_sort_across_groups=1
 
@@ -166,23 +169,23 @@ function! UserConfig()
 
     let g:coc_global_extensions = [
           \ 'coc-json',
-          \ 'coc-metals',
           \ 'coc-highlight',
           \ 'coc-explorer',
           \ 'coc-prettier'
           \ ]
     nnoremap <silent> <leader>ee :CocCommand explorer<CR>
+
     nnoremap <silent> <leader>lc :CocCommand<CR>
     nnoremap <silent> <leader>ll :CocList<CR>
-    nnoremap <silent> [l :CocPrev<CR>
-    nnoremap <silent> ]l :CocNext<CR>
+    " nnoremap <silent> [l :CocPrev<CR>
+    " nnoremap <silent> ]l :CocNext<CR>
     " Remap for rename current word
-    nnoremap <silent> <leader>ln <Plug>(coc-rename)
+    " nnoremap <silent> <leader>ln <Plug>(coc-rename)
 
     " Remap keys for gotos
-    nmap <silent> gy <Plug>(coc-type-definition)
-    nmap <silent> gi <Plug>(coc-implementation)
-    nmap <silent> gr <Plug>(coc-references)
+    " nmap <silent> gy <Plug>(coc-type-definition)
+    " nmap <silent> gi <Plug>(coc-implementation)
+    " nmap <silent> gr <Plug>(coc-references)
 
     " Use tab for trigger completion with characters ahead and navigate.
     " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -199,33 +202,137 @@ function! UserConfig()
     endfunction
 
     " Use <c-space> to trigger completion.
-    if has('nvim')
-      inoremap <silent><expr> <c-space> coc#refresh()
-    else
-      inoremap <silent><expr> <c-@> coc#refresh()
-    endif
+    " if has('nvim')
+      " inoremap <silent><expr> <c-space> coc#refresh()
+    " else
+      " inoremap <silent><expr> <c-@> coc#refresh()
+    " endif
 
     " Notify coc.nvim that <enter> has been pressed.
     " Currently used for the formatOnType feature.
-    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-          \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+    " inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+          " \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
     " Organise imports
-    nnoremap <silent> <space>oi :<C-u>CocCommand editor.action.organizeImport<CR>
+    " nnoremap <silent> <space>oi :<C-u>CocCommand editor.action.organizeImport<CR>
 
     " Toggle panel with Tree Views
-    nnoremap <silent> <space>tt :<C-u>CocCommand metals.tvp<CR>
+    " nnoremap <silent> <space>tt :<C-u>CocCommand metals.tvp<CR>
     " Toggle Tree View 'metalsPackages'
-    nnoremap <silent> <space>tk :<C-u>CocCommand metals.tvp metalsPackages<CR>
+    " nnoremap <silent> <space>tk :<C-u>CocCommand metals.tvp metalsPackages<CR>
     " Toggle Tree View 'metalsCompile'
-    nnoremap <silent> <space>tc :<C-u>CocCommand metals.tvp metalsCompile<CR>
+    " nnoremap <silent> <space>tc :<C-u>CocCommand metals.tvp metalsCompile<CR>
     " Toggle Tree View 'metalsBuild'
-    nnoremap <silent> <space>tb :<C-u>CocCommand metals.tvp metalsBuild<CR>
+    " nnoremap <silent> <space>tb :<C-u>CocCommand metals.tvp metalsBuild<CR>
     " Reveal current current class (trait or object) in Tree View 'metalsPackages'
-    nnoremap <silent> <space>tf :<C-u>CocCommand metals.revealInTreeView metalsPackages<CR>
+    " nnoremap <silent> <space>tf :<C-u>CocCommand metals.revealInTreeView metalsPackages<CR>
 
     " Disable coc in git commits
     autocmd FileType gitcommit let b:coc_enabled=0
+
+    :lua << EOF
+      local cmd = vim.cmd
+      local g = vim.g
+
+      local function map(mode, lhs, rhs, opts)
+        local options = { noremap = true }
+        if opts then
+          options = vim.tbl_extend("force", options, opts)
+        end
+        vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+      end
+
+      ----------------------------------
+      -- OPTIONS -----------------------
+      ----------------------------------
+      -- global
+      -- vim.opt_global.completeopt = { "menu", "noinsert", "noselect" }
+      -- vim.opt_global.shortmess:remove("F"):append("c")
+
+      -- LSP
+      map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
+      map("n", "<leader>lgd", "<cmd>lua vim.lsp.buf.definition()<CR>")
+      map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+      map("n", "<leader>lh", "<cmd>lua vim.lsp.buf.hover()<CR>")
+      map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+      map("n", "<leader>lgi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+      map("n", "<leader>lgt", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
+      map("n", "<leader>lr", "<cmd>lua vim.lsp.buf.references()<CR>")
+      map("n", "<leader>ls", "<cmd>lua vim.lsp.buf.document_symbol()<CR>")
+      map("n", "<leader>lS", "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>")
+      map("n", "<leader>lR", "<cmd>lua vim.lsp.buf.rename()<CR>")
+      map("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>")
+      map("n", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+      map("n", "<leader>mw", '<cmd>lua require"metals".worksheet_hover()<CR>')
+      map("n", "<leader>ma", '<cmd>lua require"metals".open_all_diagnostics()<CR>')
+      map("n", "<leader>ld", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>") -- buffer diagnostics only
+      map("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<CR>")
+      map("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<CR>")
+      map("n", "<leader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
+      map("n", "<leader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
+
+
+      -- completion related settings
+      require("compe").setup({
+        enabled = true,
+        debug = false,
+        min_length = 1,
+
+        source = {
+          path = true,
+          buffer = true,
+          vsnip = {
+            filetypes = { "scala", "sbt", "java" },
+          },
+          nvim_lsp = {
+            priority = 1000,
+            filetypes = { "scala", "sbt", "java" },
+          },
+        },
+      })
+
+      map("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', { expr = true })
+      map("i", "<Tab>", 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
+      map("i", "<CR>", 'compe#confirm("\\<CR>")', { expr = true })
+
+      ----------------------------------
+      -- COMMANDS ----------------------
+      ----------------------------------
+      -- LSP
+      cmd([[augroup lsp]])
+      cmd([[autocmd!]])
+      cmd([[autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
+      cmd([[autocmd FileType scala,sbt lua require("metals").initialize_or_attach(metals_config)]])
+      cmd([[augroup end]])
+
+      -- Need for symbol highlights to work correctly
+      vim.cmd([[hi! link LspReferenceText CursorColumn]])
+      vim.cmd([[hi! link LspReferenceRead CursorColumn]])
+      vim.cmd([[hi! link LspReferenceWrite CursorColumn]])
+      ----------------------------------
+      -- LSP Setup ---------------------
+      ----------------------------------
+      metals_config = require("metals").bare_config
+
+      -- Example of settings
+      metals_config.settings = {
+        showImplicitArguments = true,
+        excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
+        serverProperties = { "-Dmetals.enabled=true" }
+      }
+
+      -- I *highly* recommend setting statusBarProvider to true, however if you do,
+      -- you *have* to have a setting to display this in your statusline or else
+      -- you'll not see any messages from metals. There is more info in the help
+      -- docs about this
+      metals_config.init_options.statusBarProvider = "on"
+
+      -- Example if you are including snippets
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+      metals_config.capabilities = capabilities
+EOF
 
     nnoremap <silent> <space>du :DBUI <CR>
     let g:db_ui_use_nerd_fonts = 1
