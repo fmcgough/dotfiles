@@ -145,6 +145,8 @@ lvim.keys.normal_mode["<C-l>"] = "<cmd>TmuxNavigateRight<cr>"
 --   "<cmd>lua require'telescope'.extensions.project.project{}<CR>",
 --   "Projects"
 -- }
+--     nnoremap <leader>bx :bp<bar>sp<bar>bn<bar>bd<CR>
+lvim.builtin.which_key.mappings["c"] = { "<cmd>bp<bar>sp<bar>bn<bar>bd<cr>", "Close buffer" }
 lvim.builtin.which_key.mappings["q"] = { "<cmd>q<cr>", "Quit" }
 lvim.builtin.which_key.mappings["Q"] = { "<cmd>q!<cr>", "Quit without saving" }
 lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers<cr>", "Find buffer" }
@@ -164,7 +166,7 @@ lvim.builtin.which_key.mappings["t"] = {
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
 }
 lvim.builtin.which_key.mappings["m"] = {
-  "<cmd>Telescope metals commands layout_config={height=0.4}<cr>",
+  "<cmd>Telescope metals commands layout_config={height=0.5}<cr>",
   "Metals commands",
 }
 -- }}}
@@ -183,10 +185,21 @@ lvim.builtin.telescope.defaults.mappings = telescope_mappings
 
 lvim.builtin.lualine.style = "lvim"
 lvim.builtin.lualine.options.theme = "auto"
-lvim.builtin.lualine.options.section_separators = { "", "" }
-lvim.builtin.lualine.options.component_separators = { "", "" }
-lvim.builtin.lualine.options.disabled_filetypes = { "lua" }
+lvim.builtin.lualine.options.section_separators = { left = "", right = "" }
+lvim.builtin.lualine.options.component_separators = { left = "", right = "" }
+lvim.builtin.lualine.options.disabled_filetypes = {} -- { "lua" }
 lvim.builtin.lualine.sections.lualine_a = { "mode" }
+lvim.builtin.lualine.sections.lualine_b = { "filename" }
+lvim.builtin.lualine.sections.lualine_c = {
+  require("lvim.core.lualine.components").diff,
+  {
+    "vim.g.metals_status",
+    fmt = function(str)
+      return str:gsub("%%", "%%%%")
+    end
+  }
+}
+
 lvim.builtin.lualine.extensions = { "nvim-tree" }
 
 lvim.builtin.gitsigns.opts.signs.add.text = "▌"
@@ -194,12 +207,16 @@ lvim.builtin.gitsigns.opts.signs.change.text = "▌"
 lvim.builtin.gitsigns.opts.signs.changedelete.text = "▌"
 
 lvim.builtin.bufferline.active = false
+
+lvim.builtin.terminal.execs = {
+  { "gitui", "gg", "Git UI" }
+}
 -- }}}
 
 -- NvimTree {{{
 local nvimtree = lvim.builtin.nvimtree
-nvimtree.side = "left"
-nvimtree.width = 45
+nvimtree.setup.view.side = "left"
+nvimtree.setup.view.width = 45
 nvimtree.show_icons.git = 1
 nvimtree.show_icons = {
   git = 1,
@@ -260,7 +277,7 @@ require("telescope").setup({
       "--with-filename",
       "--line-number",
       "--column",
-      -- "--smart-case",
+      "--smart-case",
     },
   },
   pickers = {
@@ -311,7 +328,20 @@ lvim.lsp.document_highlight = false
 -- end
 
 -- set a formatter if you want to override the default lsp one (if it exists)
-lvim.lang.lua.formatters = {
+-- vim.list_extend(lvim.lsp.override, { "javascript" })
+-- require("lvim.lsp.manager").setup("javascript", {
+--   root_dir = function(fname)
+--     local util = require("lspconfig").util
+--     return util.root_pattern("jsconfig.json", ".git")(fname)
+--   end
+-- })
+
+local formatters = require "lvim.lsp.null-ls.formatters"
+formatters.setup {
+  {
+    exe = "prettier",
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "markdown" }
+  },
   {
     exe = "stylua",
     args = {
@@ -320,35 +350,18 @@ lvim.lang.lua.formatters = {
       "--indent-width",
       "2",
     },
+    filetypes = { "lua" }
   },
 }
-
-lvim.lang.typescript.formatters = {
-  {
-    exe = "prettier",
-  },
-}
-lvim.lang.javascript.formatters = {
-  {
-    exe = "prettier",
-  },
-}
-
-lvim.lang.scala.formatters = {
-  {
-    exe = "scalafmt",
-    args = {},
-  },
-}
-lvim.lang.scala.linters = {}
 
 -- local util = require("metals.util")
 -- lvim.lang.scala.lsp.setup.cmd = { util.path.join(util.nvim_metals_cache_dir, "metals") }
-lvim.lang.scala.lsp.provider = nil
+-- lvim.lang.scala.lsp.provider = nil
+-- lvim.lang.java.lsp.provider = nil
 
-Metals_config = require("metals").bare_config
-Metals_config.on_attach = function()
-  require("lsp").common_on_attach()
+Metals_config = require("metals").bare_config()
+Metals_config.on_attach = function(client, bufnr)
+  require("lvim.lsp").common_on_attach(client, bufnr)
 end
 Metals_config.settings = {
   showImplicitArguments = false,
@@ -356,21 +369,52 @@ Metals_config.settings = {
   excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
   serverProperties = {},
 }
-Metals_config.init_options.statusBarProvider = false
+Metals_config.init_options.statusBarProvider = "on"
 
--- lvim.lang.python.formatters = {
---   {
---     exe = "black",
---     args = {}
---   }
--- }
--- set an additional linter
--- lvim.lang.python.linters = {
---   {
---     exe = "flake8",
---     args = {}
---   }
--- }
+require("lspconfig").ember.setup {
+  cmd = { vim.fn.stdpath("data") ..  "/lsp_servers/ember/node_modules/.bin/ember-language-server", "--stdio" },
+  filetypes = { "html.handlebars",  "handlebars", "typescript", "javascript" },
+}
+
+require("lspconfig").sqls.setup {
+  cmd = {
+    vim.fn.stdpath("data") .. "/lsp_servers/sqls/sqls"
+  },
+  settings = {
+    sqls = {
+      connections = {
+        {
+          driver = "mysql",
+          proto = "tcp",
+          user = "calgary",
+          passwd = "calgary",
+          host = "0.0.0.0",
+          port = 3306,
+          dbName = "calgary",
+        }
+      }
+    }
+  },
+  on_attach = function(client)
+    client.resolved_capabilities.execute_command = true
+    client.commands = require("sqls").commands -- Neovim 0.6+ only
+
+    require("sqls").setup {
+      picker = "default"
+    }
+  end
+}
+
+-- lsputils
+vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
+vim.lsp.handlers['textDocument/references'] = require'lsputil.locations'.references_handler
+vim.lsp.handlers['textDocument/definition'] = require'lsputil.locations'.definition_handler
+vim.lsp.handlers['textDocument/declaration'] = require'lsputil.locations'.declaration_handler
+vim.lsp.handlers['textDocument/typeDefinition'] = require'lsputil.locations'.typeDefinition_handler
+vim.lsp.handlers['textDocument/implementation'] = require'lsputil.locations'.implementation_handler
+vim.lsp.handlers['textDocument/documentSymbol'] = require'lsputil.symbols'.document_handler
+vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handler
+
 -- }}}
 
 -- Additional Plugins {{{
@@ -378,6 +422,7 @@ lvim.plugins = {
 
   {
     "scalameta/nvim-metals",
+    requires = { "nvim-lua/plenary.nvim" },
   },
 
   {
@@ -453,6 +498,14 @@ lvim.plugins = {
     end,
   },
   {
+    "nanotee/sqls.nvim",
+  },
+  {
+    "RishabhRD/nvim-lsputils",
+    requires = { "RishabhRD/popfix" }
+  },
+
+  {
     "christoomey/vim-tmux-navigator",
   },
   {
@@ -466,6 +519,9 @@ lvim.plugins = {
   },
   {
     "Julian/vim-textobj-variable-segment",
+  },
+  {
+    "sheerun/vim-polyglot"
   },
 
   -- themes
@@ -509,8 +565,9 @@ lvim.plugins = {
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 lvim.autocommands.custom_groups = {
   -- { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
-  { "FileType", "scala", "setlocal omnifunc=v:lua.vim.lsp.omnifunc" },
-  { "FileType", "scala,sbt", "lua require('metals').initialize_or_attach(Metals_config)" },
+  -- { "FileType", "scala", "setlocal omnifunc=v:lua.vim.lsp.omnifunc" },
+  { "FileType", "scala,sbt,java", "lua require('metals').initialize_or_attach(Metals_config)" },
+  { "FileType", "html.handlebars", "setlocal nofixeol" },
 }
 
 -- Load the colorscheme at the end
