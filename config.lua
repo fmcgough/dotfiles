@@ -209,7 +209,7 @@ lvim.builtin.gitsigns.opts.signs.changedelete.text = "▌"
 lvim.builtin.bufferline.active = false
 
 lvim.builtin.terminal.execs = {
-  { "gitui", "gg", "Git UI" }
+  { "gitui", "<leader>gg", "Git UI" }
 }
 -- }}}
 
