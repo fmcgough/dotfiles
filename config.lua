@@ -173,7 +173,7 @@ lvim.builtin.which_key.mappings["m"] = {
 
 -- misc other builtin plugins {{{
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.dashboard.active = true
+lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
 
 lvim.builtin.telescope.defaults.layout_config.prompt_position = "top"
@@ -206,7 +206,9 @@ lvim.builtin.gitsigns.opts.signs.add.text = "▌"
 lvim.builtin.gitsigns.opts.signs.change.text = "▌"
 lvim.builtin.gitsigns.opts.signs.changedelete.text = "▌"
 
-lvim.builtin.bufferline.active = false
+lvim.builtin.bufferline.active = true
+lvim.builtin.bufferline.options.separator_style = "slant"
+lvim.builtin.bufferline.options.always_show_bufferline = true
 
 lvim.builtin.terminal.execs = {
   { "gitui", "<leader>gg", "Git UI" }
@@ -471,32 +473,6 @@ lvim.plugins = {
     end,
   },
 
-  {
-    "akinsho/bufferline.nvim",
-    config = function()
-      require("bufferline").setup({
-        options = {
-          separator_style = "slant",
-          diagnostics = "nvim_lsp",
-          diagnostics_indicator = function(count, level)
-            local icon = level:match("error") and " " or level:match("warning") and " " or " "
-            return " " .. icon .. count
-          end,
-          offsets = {
-            {
-              filetype = "NvimTree",
-              text = function()
-                return vim.fn.getcwd()
-              end,
-              highlight = "Directory",
-              text_align = "left",
-            },
-          },
-          show_close_icon = false,
-        },
-      })
-    end,
-  },
   {
     "nanotee/sqls.nvim",
   },
