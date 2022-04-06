@@ -161,7 +161,7 @@ lvim.builtin.which_key.mappings["t"] = {
   name = "+Trouble",
   r = { "<cmd>Trouble lsp_references<cr>", "References" },
   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
-  t = { "<cmd>Trouble lsp_document_diagnostics<cr>", "Diagnostics" },
+  t = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
 }
@@ -308,6 +308,9 @@ require("telescope").setup({
     oldfiles = {
       -- theme = "dropdown"
     },
+    diagnostics = {
+      wrap_results = true
+    }
   },
   extensions = {
     -- Your extension config goes in here
