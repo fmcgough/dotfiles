@@ -1,3 +1,11 @@
+--[[
+lvim is the global options object
+
+Linters should be
+filled in as strings with either
+a global executable or a path to
+an executable
+]]
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 -- vim:fdm=marker:
 
@@ -141,9 +149,15 @@ lvim.keys.normal_mode["<C-k>"] = "<cmd>TmuxNavigateUp<cr>"
 lvim.keys.normal_mode["<C-l>"] = "<cmd>TmuxNavigateRight<cr>"
 
 -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = {
---   "<cmd>lua require'telescope'.extensions.project.project{}<CR>",
---   "Projects"
+-- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
+-- lvim.builtin.which_key.mappings["t"] = {
+--   name = "+Trouble",
+--   r = { "<cmd>Trouble lsp_references<cr>", "References" },
+--   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
+--   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
+--   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
+--   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
+--   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
 -- }
 --     nnoremap <leader>bx :bp<bar>sp<bar>bn<bar>bd<CR>
 lvim.builtin.which_key.mappings["c"] = { "<cmd>bp<bar>sp<bar>bn<bar>bd<cr>", "Close buffer" }
@@ -151,20 +165,12 @@ lvim.builtin.which_key.mappings["q"] = { "<cmd>q<cr>", "Quit" }
 lvim.builtin.which_key.mappings["Q"] = { "<cmd>q!<cr>", "Quit without saving" }
 lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers<cr>", "Find buffer" }
 lvim.builtin.which_key.mappings.b["d"] = { "<cmd>bdelete<cr>", "Delete buffer" }
-lvim.builtin.which_key.mappings.g["d"] = { "<cmd>Gvdiffsplit<cr>", "Git diff" }
+-- lvim.builtin.which_key.mappings.g["d"] = { "<cmd>Gvdiffsplit<cr>", "Git diff" }
 
 lvim.builtin.which_key.mappings.l["r"] = { "<cmd>lua vim.lsp.buf.references()<cr>", "Find references" }
 lvim.builtin.which_key.mappings.l["R"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" }
 
 lvim.builtin.which_key.mappings.g["w"] = { "<cmd>lua require'gitsigns'.toggle_word_diff()<cr>", "Toggle word diff" }
-lvim.builtin.which_key.mappings["t"] = {
-  name = "+Trouble",
-  r = { "<cmd>Trouble lsp_references<cr>", "References" },
-  f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
-  t = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
-  q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
-  l = { "<cmd>Trouble loclist<cr>", "LocationList" },
-}
 lvim.builtin.which_key.mappings["m"] = {
   "<cmd>Telescope metals commands layout_config={height=0.5}<cr>",
   "Metals commands",
@@ -173,8 +179,14 @@ lvim.builtin.which_key.mappings["m"] = {
 
 -- misc other builtin plugins {{{
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
+lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
+-- lvim.builtin.notify.active = true
+lvim.builtin.indentlines.active = false
+lvim.builtin.indentlines.options.enabled = false
 lvim.builtin.terminal.active = true
+lvim.builtin.nvimtree.setup.view.side = "left"
+lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 
 lvim.builtin.telescope.defaults.layout_config.prompt_position = "top"
 lvim.builtin.telescope.defaults.sorting_strategy = "ascending"
@@ -194,10 +206,10 @@ lvim.builtin.lualine.sections.lualine_c = {
   require("lvim.core.lualine.components").diff,
   {
     "vim.g.metals_status",
-    fmt = function(str)
-      return str:gsub("%%", "%%%%")
-    end
-  }
+    -- fmt = function(str)
+    --   return str:gsub("%%", "%%%%")
+    -- end,
+  },
 }
 
 lvim.builtin.lualine.extensions = { "nvim-tree" }
@@ -211,7 +223,7 @@ lvim.builtin.bufferline.options.separator_style = "slant"
 lvim.builtin.bufferline.options.always_show_bufferline = true
 
 lvim.builtin.terminal.execs = {
-  { "gitui", "<leader>gg", "Git UI" }
+  { "gitui", "<leader>gg", "Git UI" },
 }
 -- }}}
 
@@ -219,13 +231,13 @@ lvim.builtin.terminal.execs = {
 local nvimtree = lvim.builtin.nvimtree
 nvimtree.setup.view.side = "left"
 nvimtree.setup.view.width = 45
-nvimtree.show_icons.git = 1
-nvimtree.show_icons = {
-  git = 1,
-  folders = 1,
-  files = 1,
-  folder_arrows = 0,
-}
+-- nvimtree.show_icons.git = 1
+-- nvimtree.show_icons = {
+--   git = 1,
+--   folders = 1,
+--   files = 1,
+--   folder_arrows = 0,
+-- }
 nvimtree.icons = {
   default = "",
   symlink = "",
@@ -299,8 +311,16 @@ require("telescope").setup({
         },
       },
       layout_config = {
-        height = 0.4
-      }
+        height = 0.4,
+      },
+    },
+    git_files = {
+      theme = "dropdown",
+      layout_config = {
+        height = 0.5,
+        width = 0.8,
+      },
+      -- previewer = false,
     },
     find_files = {
       -- theme = "dropdown"
@@ -309,8 +329,8 @@ require("telescope").setup({
       -- theme = "dropdown"
     },
     diagnostics = {
-      wrap_results = true
-    }
+      wrap_results = true,
+    },
   },
   extensions = {
     -- Your extension config goes in here
@@ -332,20 +352,54 @@ lvim.lsp.document_highlight = false
 --   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 -- end
 
--- set a formatter if you want to override the default lsp one (if it exists)
--- vim.list_extend(lvim.lsp.override, { "javascript" })
--- require("lvim.lsp.manager").setup("javascript", {
---   root_dir = function(fname)
---     local util = require("lspconfig").util
---     return util.root_pattern("jsconfig.json", ".git")(fname)
---   end
--- })
+-- -- set a formatter, this will override the language server formatting capabilities (if it exists)
+-- local formatters = require "lvim.lsp.null-ls.formatters"
+-- formatters.setup {
+--   { command = "black", filetypes = { "python" } },
+--   { command = "isort", filetypes = { "python" } },
+--   {
+--     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+--     command = "prettier",
+--     ---@usage arguments to pass to the formatter
+--     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+--     extra_args = { "--print-with", "100" },
+--     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+--     filetypes = { "typescript", "typescriptreact" },
+--   },
+-- }
 
-local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup {
+-- -- set additional linters
+-- local linters = require "lvim.lsp.null-ls.linters"
+-- linters.setup {
+--   { command = "flake8", filetypes = { "python" } },
+--   {
+--     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+--     command = "shellcheck",
+--     ---@usage arguments to pass to the formatter
+--     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+--     extra_args = { "--severity", "warning" },
+--   },
+--   {
+--     command = "codespell",
+--     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+--     filetypes = { "javascript", "python" },
+--   },
+-- }
+
+-- Additional Plugins
+-- lvim.plugins = {
+--     {"folke/tokyonight.nvim"},
+--     {
+--       "folke/trouble.nvim",
+--       cmd = "TroubleToggle",
+--     },
+-- }
+
+local formatters = require("lvim.lsp.null-ls.formatters")
+formatters.setup({
   {
     exe = "prettier",
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "markdown" }
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "markdown" },
   },
   {
     exe = "stylua",
@@ -355,35 +409,30 @@ formatters.setup {
       "--indent-width",
       "2",
     },
-    filetypes = { "lua" }
+    filetypes = { "lua" },
   },
-}
+})
 
 -- local util = require("metals.util")
 -- lvim.lang.scala.lsp.setup.cmd = { util.path.join(util.nvim_metals_cache_dir, "metals") }
 -- lvim.lang.scala.lsp.provider = nil
 -- lvim.lang.java.lsp.provider = nil
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "jdtls" })
 
-Metals_config = require("metals").bare_config()
-Metals_config.on_attach = function(client, bufnr)
-  require("lvim.lsp").common_on_attach(client, bufnr)
-end
-Metals_config.settings = {
-  showImplicitArguments = false,
-  showInferredType = true,
-  excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
-  serverProperties = {},
-}
-Metals_config.init_options.statusBarProvider = "on"
+local nvim_lsp = require("lspconfig")
+nvim_lsp.ember.setup({
+  cmd = { vim.fn.stdpath("data") .. "/lsp_servers/ember/node_modules/.bin/ember-language-server", "--stdio" },
+  filetypes = { "html.handlebars", "handlebars", "typescript", "javascript" },
+})
 
-require("lspconfig").ember.setup {
-  cmd = { vim.fn.stdpath("data") ..  "/lsp_servers/ember/node_modules/.bin/ember-language-server", "--stdio" },
-  filetypes = { "html.handlebars",  "handlebars", "typescript", "javascript" },
-}
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "tsserver" })
+require("lvim.lsp.manager").setup("tsserver", {
+  root_dir = nvim_lsp.util.root_pattern("tsconfig.json", "jsconfig.json", ".git"),
+})
 
-require("lspconfig").sqls.setup {
+nvim_lsp.sqls.setup({
   cmd = {
-    vim.fn.stdpath("data") .. "/lsp_servers/sqls/sqls"
+    vim.fn.stdpath("data") .. "/lsp_servers/sqls/sqls",
   },
   settings = {
     sqls = {
@@ -396,29 +445,31 @@ require("lspconfig").sqls.setup {
           host = "0.0.0.0",
           port = 3306,
           dbName = "calgary",
-        }
-      }
-    }
+        },
+      },
+    },
   },
   on_attach = function(client)
     client.resolved_capabilities.execute_command = true
     client.commands = require("sqls").commands -- Neovim 0.6+ only
 
-    require("sqls").setup {
-      picker = "default"
-    }
-  end
-}
+    require("sqls").setup({
+      picker = "default",
+    })
+  end,
+})
 
--- lsputils
-vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
-vim.lsp.handlers['textDocument/references'] = require'lsputil.locations'.references_handler
-vim.lsp.handlers['textDocument/definition'] = require'lsputil.locations'.definition_handler
-vim.lsp.handlers['textDocument/declaration'] = require'lsputil.locations'.declaration_handler
-vim.lsp.handlers['textDocument/typeDefinition'] = require'lsputil.locations'.typeDefinition_handler
-vim.lsp.handlers['textDocument/implementation'] = require'lsputil.locations'.implementation_handler
-vim.lsp.handlers['textDocument/documentSymbol'] = require'lsputil.symbols'.document_handler
-vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handler
+lvim.lsp.on_attach_callback = function()
+  vim.lsp.handlers["textDocument/codeAction"] = require("lsputil.codeAction").code_action_handler
+  vim.lsp.handlers["textDocument/references"] = require("lsputil.locations").references_handler
+  vim.lsp.handlers["textDocument/definition"] = require("lsputil.locations").definition_handler
+  vim.lsp.handlers["textDocument/declaration"] = require("lsputil.locations").declaration_handler
+  vim.lsp.handlers["textDocument/typeDefinition"] = require("lsputil.locations").typeDefinition_handler
+  vim.lsp.handlers["textDocument/implementation"] = require("lsputil.locations").implementation_handler
+  vim.lsp.handlers["textDocument/documentSymbol"] = require("lsputil.symbols").document_handler
+  vim.lsp.handlers["workspace/symbol"] = require("lsputil.symbols").workspace_handler
+  -- vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(require("lspactions").codeaction)
+end
 
 -- }}}
 
@@ -481,8 +532,28 @@ lvim.plugins = {
   },
   {
     "RishabhRD/nvim-lsputils",
-    requires = { "RishabhRD/popfix" }
+    requires = { "RishabhRD/popfix" },
   },
+  -- {
+  --   "RishabhRD/lspactions",
+  --   requires = { "nvim-lua/plenary.nvim", "nvim-lua/popup.nvim" },
+  --   config = function()
+  --     local lspactions = require("lspactions")
+  --     vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(lspactions.codeaction)
+  --   end,
+  -- },
+
+  -- {
+  --   "glepnir/lspsaga.nvim",
+  --   branch = "main",
+  --   config = function ()
+  --     local saga = require("lspsaga")
+
+  --     saga.init_lsp_saga({
+
+  --     })
+  --   end
+  -- },
 
   {
     "christoomey/vim-tmux-navigator",
@@ -500,7 +571,7 @@ lvim.plugins = {
     "Julian/vim-textobj-variable-segment",
   },
   {
-    "sheerun/vim-polyglot"
+    "sheerun/vim-polyglot",
   },
 
   -- themes
@@ -520,7 +591,8 @@ lvim.plugins = {
     "rafamadriz/neon",
   },
   {
-    "fmcgough/pencil-color.nvim",
+    -- "fmcgough/pencil-color.nvim",
+    "~/workspace/pencil-color.nvim"
   },
   -- {
   --   "projekt0n/github-nvim-theme",
@@ -542,12 +614,49 @@ lvim.plugins = {
 -- }}}
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
-lvim.autocommands.custom_groups = {
-  -- { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
-  -- { "FileType", "scala", "setlocal omnifunc=v:lua.vim.lsp.omnifunc" },
-  { "FileType", "scala,sbt,java", "lua require('metals').initialize_or_attach(Metals_config)" },
-  { "FileType", "html.handlebars", "setlocal nofixeol" },
-}
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "zsh",
+--   callback = function()
+--     -- let treesitter use bash highlight for zsh files as well
+--     require("nvim-treesitter.highlight").attach(0, "bash")
+--   end,
+-- })
+-- vim.api.nvim_create_autocmd("BufWinEnter", {
+--   pattern = { "*.lua" },
+--   command = "setlocal ts=8 sw=8",
+-- })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "scala" },
+  command = "setlocal omnifunc=v:lua.vim.lsp.omnifunc",
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "scala,sbt,java" },
+  callback = function()
+    local metals_config = require("metals").bare_config()
+    metals_config.on_attach = function(client, bufnr)
+      require("lvim.lsp").common_on_attach(client, bufnr)
+    end
+    metals_config.settings = {
+      showImplicitArguments = false,
+      showInferredType = true,
+      excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
+      serverProperties = {},
+    }
+    metals_config.init_options.statusBarProvider = "on"
+    require("metals").initialize_or_attach(metals_config)
+  end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "html.handlebars" },
+  command = "setlocal nofixeol",
+})
+
+-- lvim.autocommands.custom_groups = {
+-- { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
+-- { "FileType", "scala", "setlocal omnifunc=v:lua.vim.lsp.omnifunc" },
+-- { "FileType", "scala,sbt,java", "lua require('metals').initialize_or_attach(Metals_config)" },
+-- { "FileType", "html.handlebars", "setlocal nofixeol" },
+-- }
 
 -- Load the colorscheme at the end
 lvim.colorscheme = colorscheme
