@@ -5,17 +5,18 @@
 
 - link:
     ~/.tmux.conf:
-    ~/.i3blocks.conf:
-    ~/.config/dunst/dunstrc: dunstrc
-    ~/.config/i3/config: i3-config
-    ~/.spacevim:
+    # ~/.i3blocks.conf:
+    # ~/.config/dunst/dunstrc: dunstrc
+    # ~/.config/i3/config: i3-config
+    # ~/.spacevim:
     ~/.config/lvim/config.lua: config.lua
-    ~/workspace/i3blocks-contrib/:
-      path: 'i3blocks-contrib/*'
-      glob: true
+    ~/.config/kitty/kitty.conf: kitty.conf
+    # ~/workspace/i3blocks-contrib/:
+    #   path: 'i3blocks-contrib/*'
+    #   glob: true
     ~/.tmux/plugins/tpm/:
       path: 'tpm/*'
       glob: true
-    ~/.config/rofi/config: rofi-config
+    # ~/.config/rofi/config: rofi-config
     ~/.oh-my-zsh/custom/themes/frankie.zsh-theme: frankie.zsh-theme
 
