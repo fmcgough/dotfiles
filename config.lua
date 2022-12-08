@@ -591,8 +591,8 @@ lvim.plugins = {
     "rafamadriz/neon",
   },
   {
-    -- "fmcgough/pencil-color.nvim",
-    "~/workspace/pencil-color.nvim"
+    "fmcgough/pencil-color.nvim",
+    -- "~/workspace/pencil-color.nvim"
   },
   -- {
   --   "projekt0n/github-nvim-theme",
