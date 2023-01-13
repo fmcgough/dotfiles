@@ -147,23 +147,18 @@ lvim.keys.normal_mode["<C-h>"] = "<cmd>TmuxNavigateLeft<cr>"
 lvim.keys.normal_mode["<C-j>"] = "<cmd>TmuxNavigateDown<cr>"
 lvim.keys.normal_mode["<C-k>"] = "<cmd>TmuxNavigateUp<cr>"
 lvim.keys.normal_mode["<C-l>"] = "<cmd>TmuxNavigateRight<cr>"
+lvim.keys.visual_mode = lvim.keys.visual_mode or {}
+lvim.builtin.which_key.vmappings.l = {}
+lvim.builtin.which_key.vmappings.l["a"] = {
+  "<cmd>lua vim.lsp.buf.code_action()<CR>",
+  "Code Action"
+}
 
 -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
--- lvim.builtin.which_key.mappings["t"] = {
---   name = "+Trouble",
---   r = { "<cmd>Trouble lsp_references<cr>", "References" },
---   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
---   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
---   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
---   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
--- }
---     nnoremap <leader>bx :bp<bar>sp<bar>bn<bar>bd<CR>
 lvim.builtin.which_key.mappings["c"] = { "<cmd>bp<bar>sp<bar>bn<bar>bd<cr>", "Close buffer" }
 lvim.builtin.which_key.mappings["q"] = { "<cmd>q<cr>", "Quit" }
 lvim.builtin.which_key.mappings["Q"] = { "<cmd>q!<cr>", "Quit without saving" }
-lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers<cr>", "Find buffer" }
+lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers initial_mode=insert<cr>", "Find buffer" }
 lvim.builtin.which_key.mappings.b["d"] = { "<cmd>bdelete<cr>", "Delete buffer" }
 -- lvim.builtin.which_key.mappings.g["d"] = { "<cmd>Gvdiffsplit<cr>", "Git diff" }
 
@@ -225,6 +220,8 @@ lvim.builtin.bufferline.options.always_show_bufferline = true
 lvim.builtin.terminal.execs = {
   { "gitui", "<leader>gg", "Git UI" },
 }
+
+lvim.builtin.illuminate.active = false
 -- }}}
 
 -- NvimTree {{{
@@ -342,6 +339,7 @@ require("telescope").setup({
 -- generic settings
 -- disable highlighting reference under cursor
 lvim.lsp.document_highlight = false
+lvim.builtin.illuminate.active = false
 -- you can set a custom on_attach function that will be used for all the language servers
 -- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
 -- lvim.lsp.on_attach_callback = function(client, bufnr)
@@ -478,7 +476,7 @@ lvim.plugins = {
 
   {
     "scalameta/nvim-metals",
-    requires = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim" },
   },
 
   {
@@ -532,11 +530,11 @@ lvim.plugins = {
   },
   {
     "RishabhRD/nvim-lsputils",
-    requires = { "RishabhRD/popfix" },
+    dependencies = { "RishabhRD/popfix" },
   },
   -- {
   --   "RishabhRD/lspactions",
-  --   requires = { "nvim-lua/plenary.nvim", "nvim-lua/popup.nvim" },
+  --   dependencies = { "nvim-lua/plenary.nvim", "nvim-lua/popup.nvim" },
   --   config = function()
   --     local lspactions = require("lspactions")
   --     vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(lspactions.codeaction)
