@@ -27,19 +27,6 @@ vim.g.neon_bold = true
 vim.g.neon_style = "light"
 -- }}}
 
--- neon {{{
--- default:
--- diff_red = "#fb4934",
--- diff_green = "#8ec07c",
--- diff_blue = "#458588",
--- diff_yellow = "#fabd2f",
-
--- light:
--- colors.diff_red = "#55393d"
--- colors.diff_green = "#394634"
--- colors.diff_blue = "#354157"
--- colors.diff_yellow = "#4e432f"
-
 local diff_red = "#fb4934"
 local diff_green = "#8ec07c"
 local diff_blue = "#458588"
@@ -97,23 +84,6 @@ vim.g.PaperColor_Theme_Options = {
   },
 }
 
--- pencil statusline colours:
--- let s:base03  = {'t': s:ansi_colors ?   8 : (s:tty ? '0' : 234), 'g': '#212121'}
---   let s:base02  = {'t': s:ansi_colors ? '0' : (s:tty ? '0' : 235), 'g': '#424242'}
---   let s:base01  = {'t': s:ansi_colors ?  10 : (s:tty ? '0' : 240), 'g': '#909090'}
---   let s:base00  = {'t': s:ansi_colors ?  11 : (s:tty ? '7' : 241), 'g': '#545454'}
---   let s:base0   = {'t': s:ansi_colors ?  12 : (s:tty ? '7' : 244), 'g': '#B2B2B2'}
---   let s:base1   = {'t': s:ansi_colors ?  14 : (s:tty ? '7' : 245), 'g': '#636363'}
---   let s:base2   = {'t': s:ansi_colors ?   7 : (s:tty ? '7' : 254), 'g': '#D9D9D9'}
---   let s:base3   = {'t': s:ansi_colors ?  15 : (s:tty ? '7' : 7  ), 'g': '#C6C6C6'}
---   let s:darkblue= {'t': s:ansi_colors ?   4 : (s:tty ? '4' : 24 ), 'g': '#005F87'}
---   let s:orange  = {'t': s:ansi_colors ?   9 : (s:tty ? '1' : 166), 'g': '#D75F5F'}
---   let s:red     = {'t': s:ansi_colors ?   1 : (s:tty ? '1' : 160), 'g': '#C30771'}
---   let s:magenta = {'t': s:ansi_colors ?   5 : (s:tty ? '5' : 125), 'g': '#E32791'}
---   let s:violet  = {'t: s:ansi_colors ?  13 : (s:tty ? '5' : 61 ), 'g': '#6855DE'}
---   let s:blue    = {'t': s:ansi_colors ?   4 : (s:tty ? '4' : 33 ), 'g': '#008EC4'}
---   let s:cyan    = {'t': s:ansi_colors ?   6 : (s:tty ? '6' : 37 ), 'g': '#20A5BA'}
---   let s:green   = {'t': s:ansi_colors ?   2 : (s:tty ? '2' : 64 ), 'g': '#10A778'}
 
 if colorscheme == "PaperColor" then
   vim.cmd([[ highlight SignColumn ctermbg=253 guibg=#dadada ]])
@@ -151,7 +121,7 @@ lvim.keys.visual_mode = lvim.keys.visual_mode or {}
 lvim.builtin.which_key.vmappings.l = {}
 lvim.builtin.which_key.vmappings.l["a"] = {
   "<cmd>lua vim.lsp.buf.code_action()<CR>",
-  "Code Action"
+  "Code Action",
 }
 
 -- Use which-key to add extra bindings with the leader-key prefix
@@ -198,13 +168,7 @@ lvim.builtin.lualine.options.disabled_filetypes = {} -- { "lua" }
 lvim.builtin.lualine.sections.lualine_a = { "mode" }
 lvim.builtin.lualine.sections.lualine_b = { "filename" }
 lvim.builtin.lualine.sections.lualine_c = {
-  require("lvim.core.lualine.components").diff,
-  {
-    "vim.g.metals_status",
-    -- fmt = function(str)
-    --   return str:gsub("%%", "%%%%")
-    -- end,
-  },
+  require("lvim.core.lualine.components").diff, { "vim.g.metals_status", },
 }
 
 lvim.builtin.lualine.extensions = { "nvim-tree" }
@@ -228,13 +192,6 @@ lvim.builtin.illuminate.active = false
 local nvimtree = lvim.builtin.nvimtree
 nvimtree.setup.view.side = "left"
 nvimtree.setup.view.width = 45
--- nvimtree.show_icons.git = 1
--- nvimtree.show_icons = {
---   git = 1,
---   folders = 1,
---   files = 1,
---   folder_arrows = 0,
--- }
 nvimtree.icons = {
   default = "",
   symlink = "",
@@ -340,58 +297,6 @@ require("telescope").setup({
 -- disable highlighting reference under cursor
 lvim.lsp.document_highlight = false
 lvim.builtin.illuminate.active = false
--- you can set a custom on_attach function that will be used for all the language servers
--- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
--- lvim.lsp.on_attach_callback = function(client, bufnr)
---   local function buf_set_option(...)
---     vim.api.nvim_buf_set_option(bufnr, ...)
---   end
---   --Enable completion triggered by <c-x><c-o>
---   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
--- end
-
--- -- set a formatter, this will override the language server formatting capabilities (if it exists)
--- local formatters = require "lvim.lsp.null-ls.formatters"
--- formatters.setup {
---   { command = "black", filetypes = { "python" } },
---   { command = "isort", filetypes = { "python" } },
---   {
---     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
---     command = "prettier",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--print-with", "100" },
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "typescript", "typescriptreact" },
---   },
--- }
-
--- -- set additional linters
--- local linters = require "lvim.lsp.null-ls.linters"
--- linters.setup {
---   { command = "flake8", filetypes = { "python" } },
---   {
---     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
---     command = "shellcheck",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--severity", "warning" },
---   },
---   {
---     command = "codespell",
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "javascript", "python" },
---   },
--- }
-
--- Additional Plugins
--- lvim.plugins = {
---     {"folke/tokyonight.nvim"},
---     {
---       "folke/trouble.nvim",
---       cmd = "TroubleToggle",
---     },
--- }
 
 local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({
@@ -411,10 +316,6 @@ formatters.setup({
   },
 })
 
--- local util = require("metals.util")
--- lvim.lang.scala.lsp.setup.cmd = { util.path.join(util.nvim_metals_cache_dir, "metals") }
--- lvim.lang.scala.lsp.provider = nil
--- lvim.lang.java.lsp.provider = nil
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "jdtls" })
 
 local nvim_lsp = require("lspconfig")
@@ -427,6 +328,27 @@ vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "tsserver" }
 require("lvim.lsp.manager").setup("tsserver", {
   root_dir = nvim_lsp.util.root_pattern("tsconfig.json", "jsconfig.json", ".git"),
 })
+
+lvim.builtin.dap.active = true
+local dap = require("dap")
+dap.configurations.scala = {
+  {
+    type = "scala",
+    request = "launch",
+    name = "Run or Test Target",
+    metals = {
+      runType = "runOrTestFile",
+    },
+  },
+  {
+    type = "scala",
+    request = "launch",
+    name = "Test Target",
+    metals = {
+      runType = "testTarget",
+    },
+  },
+}
 
 nvim_lsp.sqls.setup({
   cmd = {
@@ -466,7 +388,6 @@ lvim.lsp.on_attach_callback = function()
   vim.lsp.handlers["textDocument/implementation"] = require("lsputil.locations").implementation_handler
   vim.lsp.handlers["textDocument/documentSymbol"] = require("lsputil.symbols").document_handler
   vim.lsp.handlers["workspace/symbol"] = require("lsputil.symbols").workspace_handler
-  -- vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(require("lspactions").codeaction)
 end
 
 -- }}}
@@ -532,27 +453,6 @@ lvim.plugins = {
     "RishabhRD/nvim-lsputils",
     dependencies = { "RishabhRD/popfix" },
   },
-  -- {
-  --   "RishabhRD/lspactions",
-  --   dependencies = { "nvim-lua/plenary.nvim", "nvim-lua/popup.nvim" },
-  --   config = function()
-  --     local lspactions = require("lspactions")
-  --     vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(lspactions.codeaction)
-  --   end,
-  -- },
-
-  -- {
-  --   "glepnir/lspsaga.nvim",
-  --   branch = "main",
-  --   config = function ()
-  --     local saga = require("lspsaga")
-
-  --     saga.init_lsp_saga({
-
-  --     })
-  --   end
-  -- },
-
   {
     "christoomey/vim-tmux-navigator",
   },
@@ -563,10 +463,8 @@ lvim.plugins = {
     "rktjmp/lush.nvim",
   },
   {
-    "kana/vim-textobj-user",
-  },
-  {
     "Julian/vim-textobj-variable-segment",
+    dependencies = { "kana/vim-textobj-user" },
   },
   {
     "sheerun/vim-polyglot",
@@ -592,37 +490,10 @@ lvim.plugins = {
     "fmcgough/pencil-color.nvim",
     -- "~/workspace/pencil-color.nvim"
   },
-  -- {
-  --   "projekt0n/github-nvim-theme",
-  -- config = function()
-  --   require("github-theme").setup({
-  --     themeStyle = "light",
-  --     functionStyle = "italic",
-  --     sidebars = {"qf", "vista_kind", "terminal", "packer"},
-  --   })
-  -- end
-  -- },
-
-  -- {
-  --     "ray-x/lsp_signature.nvim",
-  --     config = function() require"lsp_signature".on_attach() end,
-  --     event = "InsertEnter"
-  -- }
 }
 -- }}}
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "zsh",
---   callback = function()
---     -- let treesitter use bash highlight for zsh files as well
---     require("nvim-treesitter.highlight").attach(0, "bash")
---   end,
--- })
--- vim.api.nvim_create_autocmd("BufWinEnter", {
---   pattern = { "*.lua" },
---   command = "setlocal ts=8 sw=8",
--- })
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "scala" },
   command = "setlocal omnifunc=v:lua.vim.lsp.omnifunc",
@@ -633,6 +504,7 @@ vim.api.nvim_create_autocmd("FileType", {
     local metals_config = require("metals").bare_config()
     metals_config.on_attach = function(client, bufnr)
       require("lvim.lsp").common_on_attach(client, bufnr)
+      require("metals").setup_dap()
     end
     metals_config.settings = {
       showImplicitArguments = false,
@@ -648,13 +520,6 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "html.handlebars" },
   command = "setlocal nofixeol",
 })
-
--- lvim.autocommands.custom_groups = {
--- { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
--- { "FileType", "scala", "setlocal omnifunc=v:lua.vim.lsp.omnifunc" },
--- { "FileType", "scala,sbt,java", "lua require('metals').initialize_or_attach(Metals_config)" },
--- { "FileType", "html.handlebars", "setlocal nofixeol" },
--- }
 
 -- Load the colorscheme at the end
 lvim.colorscheme = colorscheme
