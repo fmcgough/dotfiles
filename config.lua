@@ -186,6 +186,7 @@ lvim.builtin.terminal.execs = {
 }
 
 lvim.builtin.illuminate.active = false
+lvim.builtin.breadcrumbs.active = false
 -- }}}
 
 -- NvimTree {{{
@@ -302,7 +303,7 @@ local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({
   {
     exe = "prettier",
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "markdown" },
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "markdown", "html.handlebars" },
   },
   {
     exe = "stylua",
@@ -322,10 +323,12 @@ local nvim_lsp = require("lspconfig")
 nvim_lsp.ember.setup({
   cmd = { vim.fn.stdpath("data") .. "/lsp_servers/ember/node_modules/.bin/ember-language-server", "--stdio" },
   filetypes = { "html.handlebars", "handlebars", "typescript", "javascript" },
+  root_dir = nvim_lsp.util.root_pattern("ember-cli-build.js")
 })
 
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "tsserver" })
 require("lvim.lsp.manager").setup("tsserver", {
+  cmd = { vim.fn.stdpath("data") .. "/lsp_servers/tsserver/node_modules/.bin/typescript-language-server", "--stdio" },
   root_dir = nvim_lsp.util.root_pattern("tsconfig.json", "jsconfig.json", ".git"),
 })
 
@@ -350,34 +353,36 @@ dap.configurations.scala = {
   },
 }
 
-nvim_lsp.sqls.setup({
-  cmd = {
-    vim.fn.stdpath("data") .. "/lsp_servers/sqls/sqls",
-  },
-  settings = {
-    sqls = {
-      connections = {
-        {
-          driver = "mysql",
-          proto = "tcp",
-          user = "calgary",
-          passwd = "calgary",
-          host = "0.0.0.0",
-          port = 3306,
-          dbName = "calgary",
-        },
-      },
-    },
-  },
-  on_attach = function(client)
-    client.resolved_capabilities.execute_command = true
-    client.commands = require("sqls").commands -- Neovim 0.6+ only
+require('lspconfig').sqlls.setup{}
 
-    require("sqls").setup({
-      picker = "default",
-    })
-  end,
-})
+-- nvim_lsp.sqls.setup({
+--   cmd = {
+--     vim.fn.stdpath("data") .. "/lsp_servers/sqls/sqls",
+--   },
+--   settings = {
+--     sqls = {
+--       connections = {
+--         {
+--           driver = "mysql",
+--           proto = "tcp",
+--           user = "calgary",
+--           passwd = "calgary",
+--           host = "0.0.0.0",
+--           port = 3306,
+--           dbName = "calgary",
+--         },
+--       },
+--     },
+--   },
+--   on_attach = function(client)
+--     client.resolved_capabilities.execute_command = true
+--     client.commands = require("sqls").commands -- Neovim 0.6+ only
+
+--     require("sqls").setup({
+--       picker = "default",
+--     })
+--   end,
+-- })
 
 lvim.lsp.on_attach_callback = function()
   vim.lsp.handlers["textDocument/codeAction"] = require("lsputil.codeAction").code_action_handler
@@ -447,9 +452,6 @@ lvim.plugins = {
   },
 
   {
-    "nanotee/sqls.nvim",
-  },
-  {
     "RishabhRD/nvim-lsputils",
     dependencies = { "RishabhRD/popfix" },
   },
@@ -510,7 +512,9 @@ vim.api.nvim_create_autocmd("FileType", {
       showImplicitArguments = false,
       showInferredType = true,
       excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
-      serverProperties = {},
+      serverProperties = {
+        "-Dmetals.enabled=true"
+      },
     }
     metals_config.init_options.statusBarProvider = "on"
     require("metals").initialize_or_attach(metals_config)
@@ -519,6 +523,10 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "html.handlebars" },
   command = "setlocal nofixeol",
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "gitcommit" },
+  command = "setlocal wrap",
 })
 
 -- Load the colorscheme at the end
