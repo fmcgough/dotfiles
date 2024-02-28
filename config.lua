@@ -17,84 +17,7 @@ vim.opt.colorcolumn = "120"
 -- }}}
 
 -- colour scheme config in Lua
-local colorscheme = "pencil-color" -- "neon", "material", "tokyonight", "github", "PaperColor"
--- tokyonight {{{
-vim.g.tokyonight_style = "day"
-vim.g.tokyonight_italic_functions = false
-vim.g.tokyonight_sidebars = { "qf", "vista_kind", "terminal", "packer", "NvimTree" }
-vim.g.tokyonight_day_brightness = 0.4
-vim.g.neon_bold = true
-vim.g.neon_style = "light"
--- }}}
-
-local diff_red = "#fb4934"
-local diff_green = "#8ec07c"
-local diff_blue = "#458588"
-local diff_yellow = "#fabd2f"
-vim.g.neon_overrides = {
-  DiffAdd = { fg = diff_green },
-  DiffChange = { fg = diff_blue },
-  DiffDelete = { fg = diff_red },
-
-  diffAdded = { fg = diff_green },
-  diffRemoved = { fg = diff_red },
-  diffChanged = { fg = diff_blue },
-
-  GitGutterAdd = { fg = diff_green },
-  GitGutterChange = { fg = diff_blue },
-  GitGutterDelete = { fg = diff_red },
-
-  GitSignsAdd = { fg = diff_green },
-  GitSignsAddNr = { fg = diff_green },
-  GitSignsAddLn = { fg = diff_green },
-  GitSignsChange = { fg = diff_yellow },
-  GitSignsChangeNr = { fg = diff_yellow },
-  GitSignsChangeLn = { fg = diff_yellow },
-  GitSignsDelete = { fg = diff_red },
-  GitSignsDeleteNr = { fg = diff_red },
-  GitSignsDeleteLn = { fg = diff_red },
-  SignifySignAdd = { fg = diff_green },
-  SignifySignChange = { fg = diff_yellow },
-  SignifySignDelete = { fg = diff_red },
-}
--- }}}
-
--- edge {{{
-vim.g.edge_style = "light"
--- }}}
-
--- material {{{
-vim.g.material_style = "lighter"
-vim.g.material_lighter_contrast = true
-vim.g.material_borders = true
-vim.g.material_italic_comments = true
--- }}}
-
--- PaperColor {{{
-vim.g.PaperColor_Theme_Options = {
-  theme = {
-    default = {
-      allow_italic = 1,
-    },
-    ["default.light"] = {
-      override = {
-        linenumber_bg = { "#dadada", "253" },
-      },
-    },
-  },
-}
-
-
-if colorscheme == "PaperColor" then
-  vim.cmd([[ highlight SignColumn ctermbg=253 guibg=#dadada ]])
-  vim.cmd([[ highlight! link SignifySignAdd             DiffAdd]])
-  vim.cmd([[ highlight! link SignifySignChange          DiffChange ]])
-  vim.cmd([[ highlight! link SignifySignDelete          DiffDelete ]])
-  vim.cmd([[ highlight! link SignifySignChangeDelete    SignifySignChange ]])
-  vim.cmd([[ highlight! link SignifySignDeleteFirstLine SignifySignDelete ]])
-end
-
--- }}}
+local colorscheme = "catppuccin" -- "pencil-color" -- "neon", "material", "tokyonight", "github", "PaperColor"
 
 -- keymappings {{{
 -- view all the defaults by pressing <leader>Lk
@@ -126,18 +49,25 @@ lvim.builtin.which_key.vmappings.l["a"] = {
 
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["c"] = { "<cmd>bp<bar>sp<bar>bn<bar>bd<cr>", "Close buffer" }
+lvim.builtin.which_key.mappings["f"] = {
+  "<cmd>lua require'lvim.core.telescope.custom-finders'.find_project_files{}<cr>",
+  "Find File",
+}
 lvim.builtin.which_key.mappings["q"] = { "<cmd>q<cr>", "Quit" }
 lvim.builtin.which_key.mappings["Q"] = { "<cmd>q!<cr>", "Quit without saving" }
 lvim.builtin.which_key.mappings.b["b"] = { "<cmd>Telescope buffers initial_mode=insert<cr>", "Find buffer" }
 lvim.builtin.which_key.mappings.b["d"] = { "<cmd>bdelete<cr>", "Delete buffer" }
 -- lvim.builtin.which_key.mappings.g["d"] = { "<cmd>Gvdiffsplit<cr>", "Git diff" }
 
-lvim.builtin.which_key.mappings.l["r"] = { "<cmd>lua vim.lsp.buf.references()<cr>", "Find references" }
+lvim.builtin.which_key.mappings.l["r"] = {
+  "<cmd>Telescope lsp_references layout_config={width=0.8}<cr>",
+  "Find references",
+}
 lvim.builtin.which_key.mappings.l["R"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" }
 
 lvim.builtin.which_key.mappings.g["w"] = { "<cmd>lua require'gitsigns'.toggle_word_diff()<cr>", "Toggle word diff" }
 lvim.builtin.which_key.mappings["m"] = {
-  "<cmd>Telescope metals commands layout_config={height=0.5}<cr>",
+  "<cmd>Telescope metals commands layout_config={height=0.67}<cr>",
   "Metals commands",
 }
 -- }}}
@@ -150,15 +80,21 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.indentlines.active = false
 lvim.builtin.indentlines.options.enabled = false
 lvim.builtin.terminal.active = true
-lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 
 lvim.builtin.telescope.defaults.layout_config.prompt_position = "top"
+lvim.builtin.telescope.defaults.path_display = { truncate = 4 }
 lvim.builtin.telescope.defaults.sorting_strategy = "ascending"
 local telescope_mappings = require("telescope.mappings").default_mappings
 telescope_mappings.n["H"] = false
 telescope_mappings.n["L"] = false
 lvim.builtin.telescope.defaults.mappings = telescope_mappings
+lvim.builtin.telescope.pickers.git_files = {
+  theme = "dropdown",
+  layout_config = {
+    height = 0.5,
+    width = 0.8,
+  },
+}
 
 lvim.builtin.lualine.style = "lvim"
 lvim.builtin.lualine.options.theme = "auto"
@@ -168,7 +104,8 @@ lvim.builtin.lualine.options.disabled_filetypes = {} -- { "lua" }
 lvim.builtin.lualine.sections.lualine_a = { "mode" }
 lvim.builtin.lualine.sections.lualine_b = { "filename" }
 lvim.builtin.lualine.sections.lualine_c = {
-  require("lvim.core.lualine.components").diff, { "vim.g.metals_status", },
+  require("lvim.core.lualine.components").diff,
+  { "vim.g.metals_status" },
 }
 
 lvim.builtin.lualine.extensions = { "nvim-tree" }
@@ -180,6 +117,7 @@ lvim.builtin.gitsigns.opts.signs.changedelete.text = "▌"
 lvim.builtin.bufferline.active = true
 lvim.builtin.bufferline.options.separator_style = "slant"
 lvim.builtin.bufferline.options.always_show_bufferline = true
+lvim.builtin.bufferline.highlights = require("catppuccin.groups.integrations.bufferline").get()
 
 lvim.builtin.terminal.execs = {
   { "gitui", "<leader>gg", "Git UI" },
@@ -192,6 +130,8 @@ lvim.builtin.breadcrumbs.active = false
 -- NvimTree {{{
 local nvimtree = lvim.builtin.nvimtree
 nvimtree.setup.view.side = "left"
+nvimtree.setup.renderer.icons.show.git = false
+nvimtree.setup.renderer.group_empty = true
 nvimtree.setup.view.width = 45
 nvimtree.icons = {
   default = "",
@@ -229,68 +169,29 @@ nvimtree.icons = {
 lvim.builtin.treesitter.ensure_installed = {}
 lvim.builtin.treesitter.ignore_install = {} -- e.g. { "haskell" }
 lvim.builtin.treesitter.highlight.enable = true
--- }}}
-
--- telescope {{{
-require("telescope").setup({
-  defaults = {
-    -- Your defaults config goes in here
-    theme = "dropdown",
-    mappings = {
-      i = {},
-    },
-    vimgrep_arguments = {
-      "rg",
-      "--color=never",
-      "--no-heading",
-      "--with-filename",
-      "--line-number",
-      "--column",
-      "--smart-case",
-    },
+lvim.builtin.treesitter.autotag = {
+  enable = true,
+  filetypes = {
+    "html",
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "svelte",
+    "vue",
+    "tsx",
+    "jsx",
+    "rescript",
+    "xml",
+    "php",
+    "markdown",
+    "astro",
+    "glimmer",
+    "handlebars",
+    "hbs",
+    "html.handlebars", -- doesn't work
   },
-  pickers = {
-    -- Your special builtin config goes in here
-    buffers = {
-      sort_lastused = true,
-      -- theme = "dropdown",
-      previewer = false,
-      mappings = {
-        i = {
-          ["<c-d>"] = require("telescope.actions").delete_buffer,
-          -- Right hand side can also be the name of the action as a string
-          -- ["<c-d>"] = "delete_buffer",
-        },
-        n = {
-          ["<c-d>"] = require("telescope.actions").delete_buffer,
-        },
-      },
-      layout_config = {
-        height = 0.4,
-      },
-    },
-    git_files = {
-      theme = "dropdown",
-      layout_config = {
-        height = 0.5,
-        width = 0.8,
-      },
-      -- previewer = false,
-    },
-    find_files = {
-      -- theme = "dropdown"
-    },
-    oldfiles = {
-      -- theme = "dropdown"
-    },
-    diagnostics = {
-      wrap_results = true,
-    },
-  },
-  extensions = {
-    -- Your extension config goes in here
-  },
-})
+}
 -- }}}
 
 -- LSP settings {{{
@@ -303,7 +204,15 @@ local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({
   {
     exe = "prettier",
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "markdown", "html.handlebars" },
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "markdown",
+      "handlebars",
+      "html.handlebars",
+    },
   },
   {
     exe = "stylua",
@@ -322,14 +231,44 @@ vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "jdtls" })
 local nvim_lsp = require("lspconfig")
 nvim_lsp.ember.setup({
   cmd = { vim.fn.stdpath("data") .. "/lsp_servers/ember/node_modules/.bin/ember-language-server", "--stdio" },
-  filetypes = { "html.handlebars", "handlebars", "typescript", "javascript" },
-  root_dir = nvim_lsp.util.root_pattern("ember-cli-build.js")
+  filetypes = {
+    "html.handlebars",
+    "handlebars",
+    "typescript",
+    "javascript",
+    "typescript.glimmer",
+    "javascript.glimmer",
+  },
+  root_dir = nvim_lsp.util.root_pattern("ember-cli-build.js"),
 })
 
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "tsserver" })
 require("lvim.lsp.manager").setup("tsserver", {
   cmd = { vim.fn.stdpath("data") .. "/lsp_servers/tsserver/node_modules/.bin/typescript-language-server", "--stdio" },
   root_dir = nvim_lsp.util.root_pattern("tsconfig.json", "jsconfig.json", ".git"),
+  settings = {
+    typescript = {
+      implicitProjectConfig = {
+        experimentalDecorators = true,
+      },
+      preferences = {
+        importModuleSpecifier = "non-relative",
+      },
+    },
+    javascript = {
+      implicitProjectConfig = {
+        experimentalDecorators = true,
+      },
+      preferences = {
+        importModuleSpecifier = "non-relative",
+      },
+    },
+    ["js/ts"] = {
+      implicitProjectConfig = {
+        experimentalDecorators = true,
+      },
+    },
+  },
 })
 
 lvim.builtin.dap.active = true
@@ -353,7 +292,7 @@ dap.configurations.scala = {
   },
 }
 
-require('lspconfig').sqlls.setup{}
+require("lspconfig").sqlls.setup({})
 
 -- nvim_lsp.sqls.setup({
 --   cmd = {
@@ -447,6 +386,7 @@ lvim.plugins = {
         hsl_fn = true, -- CSS hsl() and hsla() functions
         css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
         css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+        names = false,
       })
     end,
   },
@@ -469,10 +409,17 @@ lvim.plugins = {
     dependencies = { "kana/vim-textobj-user" },
   },
   {
-    "sheerun/vim-polyglot",
+    "andrewferrier/wrapping.nvim",
+    config = function()
+      require("wrapping").setup({
+        softener = {
+          markdown = true,
+        },
+      })
+    end,
   },
 
-  -- themes
+  -- themesbase
   {
     "Th3Whit3Wolf/space-nvim",
   },
@@ -491,6 +438,34 @@ lvim.plugins = {
   {
     "fmcgough/pencil-color.nvim",
     -- "~/workspace/pencil-color.nvim"
+  },
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    config = function()
+      require("catppuccin").setup({
+        flavour = "latte",
+        show_end_of_buffer = true,
+        styles = {
+          conditionals = { "italic", "bold" },
+          keywords = { "bold" },
+          booleans = { "bold" },
+        },
+        custom_highlights = function(colours)
+          return {
+            LineNr = { bg = colours.crust, fg = colours.surface1 },
+            SignColumn = { link = "LineNr" },
+            ColorColumn = { bg = colours.crust },
+            GitSignsAdd = { bg = colours.crust, fg = colours.green },
+            GitSignsChange = { bg = colours.crust, fg = colours.yellow },
+            GitSignsDelete = { bg = colours.crust, fg = colours.red },
+            StorageClass = { fg = colours.pink },
+            Type = { link = "StorageClass" },
+          }
+        end,
+      })
+    end,
   },
 }
 -- }}}
@@ -513,15 +488,18 @@ vim.api.nvim_create_autocmd("FileType", {
       showInferredType = true,
       excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
       serverProperties = {
-        "-Dmetals.enabled=true"
+        "-Dmetals.enabled=true",
       },
+      scalafixConfigPath = "/Users/frankie/.scalafix.conf",
+      enableSemanticHighlighting = false,
     }
     metals_config.init_options.statusBarProvider = "on"
     require("metals").initialize_or_attach(metals_config)
   end,
 })
+
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "html.handlebars" },
+  pattern = { "html.handlebars", "handlebars" },
   command = "setlocal nofixeol",
 })
 vim.api.nvim_create_autocmd("FileType", {
