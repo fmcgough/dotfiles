@@ -3,5 +3,3 @@
 -- Add any additional keymaps here
 
 local map = vim.keymap.set
-
-map({ "n" }, "<Tab>", "<cmd>bn<CR>", { expr = true, silent = true })
