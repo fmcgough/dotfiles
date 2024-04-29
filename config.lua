@@ -70,7 +70,15 @@ lvim.builtin.which_key.mappings["m"] = {
   "<cmd>Telescope metals commands layout_config={height=0.67}<cr>",
   "Metals commands",
 }
--- }}}
+lvim.builtin.which_key.mappings["D"] = { "<cmd>lua require'dbee'.open()<cr>", "Database" }
+lvim.builtin.which_key.mappings["x"] = {
+  name = "Trouble",
+  x = { "<cmd>lua require('trouble').toggle()<cr>", "Toggle" },
+  w = { "<cmd>lua require('trouble').toggle('workspace_diagnostics')<cr>", "Workspace diagnostics" },
+  d = { "<cmd>lua require('trouble').toggle('document_diagnostics')<cr>", "Document diagnostics" },
+  q = { "<cmd>lua require('trouble').toggle('quickfix')<cr>", "Quickfix" },
+  l = { "<cmd>lua require('trouble').toggle('loclist')<cr>", "Loclist" },
+}
 
 -- misc other builtin plugins {{{
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
@@ -212,6 +220,7 @@ formatters.setup({
       "markdown",
       "handlebars",
       "html.handlebars",
+      "javascript.glimmer",
     },
   },
   {
@@ -243,7 +252,8 @@ nvim_lsp.ember.setup({
 })
 
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "tsserver" })
-require("lvim.lsp.manager").setup("tsserver", {
+-- require("lvim.lsp.manager").setup("tsserver", {
+nvim_lsp.tsserver.setup({
   cmd = { vim.fn.stdpath("data") .. "/lsp_servers/tsserver/node_modules/.bin/typescript-language-server", "--stdio" },
   root_dir = nvim_lsp.util.root_pattern("tsconfig.json", "jsconfig.json", ".git"),
   settings = {
@@ -370,9 +380,27 @@ lvim.plugins = {
   {
     "folke/lsp-colors.nvim",
   },
+
   {
-    "folke/trouble.nvim",
-    cmd = "TroubleToggle",
+    "petertriho/cmp-git",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+
+  {
+    "kndndrj/nvim-dbee",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+    },
+    build = function()
+      -- Install tries to automatically detect the install method.
+      -- if it fails, try calling it with one of these parameters:
+      --    "curl", "wget", "bitsadmin", "go"
+      require("dbee").install()
+    end,
+    config = function()
+      require("dbee").setup()
+      vim.opt.path:append(vim.fn.stdpath("data") .. "/dbee/bin")
+    end,
   },
 
   {
@@ -419,7 +447,22 @@ lvim.plugins = {
     end,
   },
 
-  -- themesbase
+  {
+    "nvim-treesitter/nvim-treesitter-context"
+  },
+  {
+    "stevearc/dressing.nvim"
+  },
+
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+
+    }
+  },
+
+  -- themes
   {
     "Th3Whit3Wolf/space-nvim",
   },
@@ -451,17 +494,30 @@ lvim.plugins = {
           conditionals = { "italic", "bold" },
           keywords = { "bold" },
           booleans = { "bold" },
+          loops = { "bold" },
         },
         custom_highlights = function(colours)
           return {
             LineNr = { bg = colours.crust, fg = colours.surface1 },
             SignColumn = { link = "LineNr" },
+            CursorLine = { bg = colours.mantle },
+            CursorColumn = { bg = colours.mantle },
             ColorColumn = { bg = colours.crust },
             GitSignsAdd = { bg = colours.crust, fg = colours.green },
             GitSignsChange = { bg = colours.crust, fg = colours.yellow },
             GitSignsDelete = { bg = colours.crust, fg = colours.red },
-            StorageClass = { fg = colours.pink },
-            Type = { link = "StorageClass" },
+            Type = { fg = colours.pink },
+
+            ["@comment.todo"] = { fg = colours.base, bg = colours.sky },
+            ["@comment.hint"] = { fg = colours.base, bg = colours.teal },
+            ["@comment.note"] = { link = "@comment.hint" },
+            ["@comment.warning"] = { fg = colours.base, bg = colours.yellow },
+            ["@comment.error"] = { fg = colours.base, bg = colours.red },
+            ["@text.todo"] = { link = "@comment.todo" },
+            ["@text.hint"] = { link = "@comment.hint" },
+            ["@text.note"] = { link = "@comment.hint" },
+            ["@text.warning"] = { link = "@comment.warning" },
+            ["@text.danger"] = { link = "@comment.error" },
           }
         end,
       })
