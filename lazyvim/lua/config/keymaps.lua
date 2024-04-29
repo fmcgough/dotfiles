@@ -2,4 +2,11 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
-local map = vim.keymap.set
+vim.keymap.set({ "n", "v" }, "<leader>w", "<cmd>w<cr>", { silent = true })
+
+vim.keymap.del("n", "<leader>ww")
+vim.keymap.del("n", "<leader>wd")
+vim.keymap.del("n", "<leader>w-")
+vim.keymap.del("n", "<leader>w|")
+
+vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { silent = true })

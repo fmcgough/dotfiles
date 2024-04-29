@@ -1,6 +1,7 @@
 return {
   {
     "catppuccin",
+    -- priority = 1000,
     opts = function(_, opts)
       opts.flavour = "latte"
       opts.show_end_of_buffer = true
@@ -12,13 +13,14 @@ return {
       opts.custom_highlights = function(colours)
         return {
           LineNr = { bg = colours.crust, fg = colours.surface1 },
-          SignColumn = { link = "LineNr" },
+          SignColumn = { bg = colours.crust },
           ColorColumn = { bg = colours.crust },
           GitSignsAdd = { bg = colours.crust, fg = colours.green },
           GitSignsChange = { bg = colours.crust, fg = colours.yellow },
           GitSignsDelete = { bg = colours.crust, fg = colours.red },
           StorageClass = { fg = colours.pink },
           Type = { link = "StorageClass" },
+          -- DiagnosticSignWarn = { bg = colours.crust },
         }
       end
     end,
@@ -46,9 +48,13 @@ return {
 
   {
     "akinsho/bufferline.nvim",
+    dependencies = {
+      "catppuccin",
+    },
     opts = function(_, opts)
       opts.options.always_show_bufferline = true
       opts.options.separator_style = "slant"
+      opts.highlights = require("catppuccin.groups.integrations.bufferline").get()
     end,
   },
 

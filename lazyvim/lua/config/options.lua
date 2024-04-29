@@ -3,3 +3,6 @@
 -- Add any additional options here
 vim.opt.background = "light"
 vim.opt.colorcolumn = "120"
+
+-- keep the ~ characters in the sign column at the end of a buffer
+vim.opt.fillchars:remove("eob")
