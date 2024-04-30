@@ -45,6 +45,10 @@ return {
     "folke/tokyonight.nvim",
     enabled = false,
   },
+  {
+    "folke/flash.nvim",
+    enabled = false,
+  },
 
   {
     "akinsho/bufferline.nvim",
@@ -66,6 +70,14 @@ return {
   },
 
   {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    opts = function(_, opts)
+      table.insert(opts.sections.lualine_x, 1, { "vim.g.metals_status" })
+    end,
+  },
+
+  {
     "alexghergh/nvim-tmux-navigation",
     config = function()
       require("nvim-tmux-navigation").setup({
@@ -81,5 +93,21 @@ return {
       { "<C-k>", "<Cmd>NvimTmuxNavigateUp<CR>" },
       { "<C-l>", "<Cmd>NvimTmuxNavigateRight<CR>" },
     },
+  },
+
+  {
+    "tpope/vim-surround",
+  },
+  {
+    "Julian/vim-textobj-variable-segment",
+    dependencies = { "kana/vim-textobj-user" },
+  },
+
+  {
+    "nvim-telescope/telescope.nvim",
+    opts = function(_, opts)
+      opts.defaults.layout_config = { prompt_position = "top" }
+      opts.defaults.sorting_strategy = "ascending"
+    end,
   },
 }

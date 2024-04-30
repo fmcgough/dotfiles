@@ -10,3 +10,5 @@ vim.keymap.del("n", "<leader>w-")
 vim.keymap.del("n", "<leader>w|")
 
 vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { silent = true })
+
+vim.keymap.set("n", "<leader>m", "<cmd>Telescope metals commands layout_config={height=0.67}<cr>", { silent = true })
