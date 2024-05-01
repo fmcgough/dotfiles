@@ -35,6 +35,13 @@ return {
     opts = {
       colorscheme = "catppuccin",
     },
+    keys = {
+      { "<leader>w", "<cmd>w<cr>", desc = "Write file" },
+      { "<leader>ww", false },
+      { "<leader>wd", false },
+      { "<leader>w-", false },
+      { "<leader>w|", false },
+    }
   },
 
   {
