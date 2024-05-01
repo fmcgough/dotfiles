@@ -20,7 +20,11 @@ return {
           GitSignsDelete = { bg = colours.crust, fg = colours.red },
           StorageClass = { fg = colours.pink },
           Type = { link = "StorageClass" },
-          -- DiagnosticSignWarn = { bg = colours.crust },
+          DiagnosticSignError = { bg = colours.crust },
+          DiagnosticSignHint = { bg = colours.crust },
+          DiagnosticSignInfo = { bg = colours.crust },
+          DiagnosticSignOk = { bg = colours.crust },
+          DiagnosticSignWarn = { bg = colours.crust },
         }
       end
     end,
@@ -109,5 +113,15 @@ return {
       opts.defaults.layout_config = { prompt_position = "top" }
       opts.defaults.sorting_strategy = "ascending"
     end,
+  },
+
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    dependencies = {
+      "s1n7ax/nvim-window-picker",
+      opts = {
+        hint = "floating-big-letter"
+      },
+    },
   },
 }
