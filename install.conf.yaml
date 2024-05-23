@@ -22,4 +22,5 @@
     # ~/.config/rofi/config: rofi-config
     ~/.oh-my-zsh/custom/themes/frankie.zsh-theme: frankie.zsh-theme
     ~/.config/nvim: lazyvim
+    ~/.config/alacritty/alacritty.toml: alacritty.toml
 

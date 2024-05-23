@@ -1,0 +1,41 @@
+[window]
+startup_mode = "Maximized"
+decorations = "None"
+dynamic_title = false
+dynamic_padding = true
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font Mono", style = "Light" }
+size = 13
+
+[colors]
+
+# One Half Light
+[colors.primary]
+background = "#fafafa"
+foreground = "#383a42"
+
+[colors.normal]
+black   = "#383a42"
+red     = "#e45649"
+green   = "#50a14f"
+yellow  = "#c18401"
+blue    = "#0184bc"
+magenta = "#a626a4"
+cyan    = "#0997b3"
+white   = "#fafafa"
+
+[colors.bright]
+black   = "#383a42"
+red     = "#e45649"
+green   = "#50a14f"
+yellow  = "#c18401"
+blue    = "#0184bc"
+magenta = "#a626a4"
+cyan    = "#0997b3"
+white   = "#fafafa"
+
+[cursor]
+
+[mouse]
+hide_when_typing = true
