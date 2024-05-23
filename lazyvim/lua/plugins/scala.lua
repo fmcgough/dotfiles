@@ -3,7 +3,7 @@ return {
     "scalameta/nvim-metals",
     init = function()
       local metals_config = require("metals").bare_config()
-      metals_config.init_options.statusBarProvider = "on"
+      metals_config.init_options.statusBarProvider = "off"
       metals_config.settings = {
         showImplicitArguments = true,
         excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
@@ -11,6 +11,8 @@ return {
           "-Dmetals.enabled=true",
         },
         scalafixConfigPath = vim.env.HOME .. "/.scalafix.conf",
+        javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home/jre",
+        sbtScript = "/opt/homebrew/bin/sbt",
       }
       metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
       metals_config.on_attach = function(client, bufnr)
@@ -65,5 +67,5 @@ return {
     opts = function(_, opts)
       opts.adapters = { "neotest-scala"}
     end
-  }
+  },
 }

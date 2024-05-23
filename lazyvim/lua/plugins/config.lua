@@ -12,19 +12,19 @@ return {
       }
       opts.custom_highlights = function(colours)
         return {
-          LineNr = { bg = colours.crust, fg = colours.surface1 },
-          SignColumn = { bg = colours.crust },
-          ColorColumn = { bg = colours.crust },
-          GitSignsAdd = { bg = colours.crust, fg = colours.green },
-          GitSignsChange = { bg = colours.crust, fg = colours.yellow },
-          GitSignsDelete = { bg = colours.crust, fg = colours.red },
-          StorageClass = { fg = colours.pink },
-          Type = { link = "StorageClass" },
-          DiagnosticSignError = { bg = colours.crust },
-          DiagnosticSignHint = { bg = colours.crust },
-          DiagnosticSignInfo = { bg = colours.crust },
-          DiagnosticSignOk = { bg = colours.crust },
-          DiagnosticSignWarn = { bg = colours.crust },
+          -- LineNr = { bg = colours.crust, fg = colours.surface1 },
+          -- SignColumn = { bg = colours.crust },
+          -- ColorColumn = { bg = colours.crust },
+          -- GitSignsAdd = { bg = colours.crust, fg = colours.green },
+          -- GitSignsChange = { bg = colours.crust, fg = colours.yellow },
+          -- GitSignsDelete = { bg = colours.crust, fg = colours.red },
+          -- StorageClass = { fg = colours.pink },
+          -- Type = { link = "StorageClass" },
+          -- DiagnosticSignError = { bg = colours.crust },
+          -- DiagnosticSignHint = { bg = colours.crust },
+          -- DiagnosticSignInfo = { bg = colours.crust },
+          -- DiagnosticSignOk = { bg = colours.crust },
+          -- DiagnosticSignWarn = { bg = colours.crust },
         }
       end
     end,
@@ -41,7 +41,7 @@ return {
       { "<leader>wd", false },
       { "<leader>w-", false },
       { "<leader>w|", false },
-    }
+    },
   },
 
   {
@@ -81,14 +81,6 @@ return {
   },
 
   {
-    "nvim-lualine/lualine.nvim",
-    event = "VeryLazy",
-    opts = function(_, opts)
-      table.insert(opts.sections.lualine_x, 1, { "vim.g.metals_status" })
-    end,
-  },
-
-  {
     "alexghergh/nvim-tmux-navigation",
     config = function()
       require("nvim-tmux-navigation").setup({
@@ -117,7 +109,8 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     opts = function(_, opts)
-      opts.defaults.layout_config = { prompt_position = "top" }
+      opts.defaults.layout_config = { prompt_position = "top", width = 0.67 }
+      opts.defaults.layout_strategy = "center"
       opts.defaults.sorting_strategy = "ascending"
     end,
   },
@@ -127,8 +120,17 @@ return {
     dependencies = {
       "s1n7ax/nvim-window-picker",
       opts = {
-        hint = "floating-big-letter"
+        hint = "floating-big-letter",
       },
     },
   },
+
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      inlay_hints = {
+        enabled = false
+      }
+    }
+  }
 }
