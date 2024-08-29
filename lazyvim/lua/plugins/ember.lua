@@ -10,6 +10,7 @@ return {
           "javascript",
           "typescript.glimmer",
           "javascript.glimmer",
+          "glimmer",
         },
       }
     end,
@@ -22,5 +23,14 @@ return {
         "glimmer",
       })
     end,
+  },
+
+  {
+    "windwp/nvim-ts-autotag",
+    opts = function(_, opts)
+      opts.filetypes = opts.filetypes or {}
+      table.insert(opts.filetypes, "gjs")
+      table.insert(opts.filetypes, "glimmer")
+    end
   },
 }

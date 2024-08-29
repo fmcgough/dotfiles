@@ -123,6 +123,11 @@ return {
         hint = "floating-big-letter",
       },
     },
+    opts = {
+      filesystem = {
+        group_empty_dirs = true
+      }
+    }
   },
 
   {
@@ -132,5 +137,26 @@ return {
         enabled = false
       }
     }
-  }
+  },
+
+  {
+    "folke/which-key.nvim",
+    keys = {
+      { "<leader>w", "<cmd>w<cr>", desc = "Save buffer" }
+    }
+  },
+
+  {
+    "mfussenegger/nvim-lint",
+    opts = {
+      linters = {
+        ["markdownlint-cli2"] = {
+          args = {
+            "--config",
+            "~/.markdownlint.jsonc"
+          }
+        }
+      }
+    }
+  },
 }
