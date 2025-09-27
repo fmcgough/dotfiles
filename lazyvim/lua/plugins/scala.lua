@@ -18,7 +18,7 @@ return {
             },
           },
           settings = {
-            -- serverVersion = "1.3.1",
+            -- serverVersion = "1.4.0",
             showImplicitArguments = true,
             excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
 
@@ -26,12 +26,11 @@ return {
               "-Dmetals.enabled=true",
             },
             scalafixConfigPath = vim.env.HOME .. "/.scalafix.conf",
-            javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home/jre",
-            -- javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home/jre",
-            -- javaVersion = "11",
+            -- javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home/jre",
+            javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home",
             sbtScript = "/opt/homebrew/bin/sbt",
           },
-          capabilities = require("cmp_nvim_lsp").default_capabilities()
+          capabilities = require("blink-cmp").get_lsp_capabilities(nil, true)
         },
       },
     },

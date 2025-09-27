@@ -10,6 +10,13 @@ return {
         keywords = { "bold" },
         booleans = { "bold" },
       }
+      -- workaround
+      local bufferline = require("catppuccin.groups.integrations.bufferline")
+      if bufferline then
+        bufferline.get = bufferline.get_theme
+      end
+
+      -- custom colours
       opts.custom_highlights = function(colours)
         return {
           -- LineNr = { bg = colours.crust, fg = colours.surface1 },
@@ -45,14 +52,6 @@ return {
   },
 
   {
-    "echasnovski/mini.indentscope",
-    enabled = false,
-  },
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    enabled = false,
-  },
-  {
     "folke/tokyonight.nvim",
     enabled = false,
   },
@@ -69,7 +68,7 @@ return {
     opts = function(_, opts)
       opts.options.always_show_bufferline = true
       opts.options.separator_style = "slant"
-      opts.highlights = require("catppuccin.groups.integrations.bufferline").get()
+      opts.highlights = require("catppuccin.groups.integrations.bufferline").get_theme()
     end,
   },
 
@@ -159,4 +158,31 @@ return {
       }
     }
   },
+
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters = {
+        ["markdownlint-cli2"] = {
+          prepend_args = {
+            "--config",
+            "~/.markdownlint.jsonc"
+          }
+        }
+      }
+    }
+  },
+
+  {
+    "rest-nvim/rest.nvim"
+  },
+
+  {
+    "folke/snacks.nvim",
+    opts = {
+      indent = {
+        enabled = false
+      }
+    }
+  }
 }
