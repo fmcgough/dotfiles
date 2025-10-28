@@ -10,11 +10,6 @@ return {
         keywords = { "bold" },
         booleans = { "bold" },
       }
-      -- workaround
-      local bufferline = require("catppuccin.groups.integrations.bufferline")
-      if bufferline then
-        bufferline.get = bufferline.get_theme
-      end
 
       -- custom colours
       opts.custom_highlights = function(colours)
@@ -68,7 +63,6 @@ return {
     opts = function(_, opts)
       opts.options.always_show_bufferline = true
       opts.options.separator_style = "slant"
-      opts.highlights = require("catppuccin.groups.integrations.bufferline").get_theme()
     end,
   },
 

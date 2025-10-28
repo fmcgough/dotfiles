@@ -4,14 +4,15 @@ return {
     opts = {
       servers = {
         metals = {
+          cmd = { vim.env.HOME .. "/.cache/nvim/nvim-metals/metals" },
           keys = {
             {
               "<leader>m",
               function()
                 require("telescope").extensions.metals.commands({
                   layout_config = {
-                    height = 0.75
-                  }
+                    height = 0.75,
+                  },
                 })
               end,
               desc = "Metals commands",
@@ -30,7 +31,8 @@ return {
             javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home",
             sbtScript = "/opt/homebrew/bin/sbt",
           },
-          capabilities = require("blink-cmp").get_lsp_capabilities(nil, true)
+          capabilities = require("blink-cmp").get_lsp_capabilities(nil, true),
+          filetypes = { "scala", "sbt", "java" }
         },
       },
     },
@@ -46,7 +48,7 @@ return {
       "stevanmilic/neotest-scala",
     },
     opts = function(_, opts)
-      opts.adapters = { "neotest-scala"}
-    end
+      opts.adapters = { "neotest-scala" }
+    end,
   },
 }
