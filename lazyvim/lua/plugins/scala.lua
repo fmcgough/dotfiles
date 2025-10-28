@@ -1,41 +1,38 @@
 return {
   {
-    "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        metals = {
-          cmd = { vim.env.HOME .. "/.cache/nvim/nvim-metals/metals" },
-          keys = {
-            {
-              "<leader>m",
-              function()
-                require("telescope").extensions.metals.commands({
-                  layout_config = {
-                    height = 0.75,
-                  },
-                })
-              end,
-              desc = "Metals commands",
-            },
-          },
-          settings = {
-            -- serverVersion = "1.4.0",
-            showImplicitArguments = true,
-            excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
+    "scalameta/nvim-metals",
+    opts = function()
+      local metals_config = require("metals").bare_config()
 
-            serverProperties = {
-              "-Dmetals.enabled=true",
-            },
-            scalafixConfigPath = vim.env.HOME .. "/.scalafix.conf",
-            -- javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home/jre",
-            javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home",
-            sbtScript = "/opt/homebrew/bin/sbt",
-          },
-          capabilities = require("blink-cmp").get_lsp_capabilities(nil, true),
-          filetypes = { "scala", "sbt", "java" }
+      metals_config.init_options.statusBarProvider = "off"
+      metals_config.settings = {
+        verboseCompilation = true,
+
+        showImplicitArguments = true,
+        showImplicitConversionsAndClasses = true,
+        showInferredType = true,
+        superMethodLensesEnabled = true,
+        excludedPackages = {
+          "akka.actor.typed.javadsl",
+          "org.apache.pekko.actor.typed.javadsl",
+          "com.github.swagger.akka.javadsl",
         },
-      },
-    },
+        testUserInterface = "Test Explorer",
+        -- serverVersion = "1.4.0",
+
+        serverProperties = {
+          "-Dmetals.enabled=true",
+        },
+        scalafixConfigPath = vim.env.HOME .. "/.scalafix.conf",
+        -- javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home/jre",
+        javaHome = "/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home",
+        sbtScript = "/opt/homebrew/bin/sbt",
+      }
+
+      return metals_config
+    end,
+
+    ft = { "scala", "sbt", "java" },
   },
 
   {
