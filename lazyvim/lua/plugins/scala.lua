@@ -1,6 +1,15 @@
 return {
   {
     "scalameta/nvim-metals",
+    keys = {
+      {
+        "<leader>me",
+        function()
+          require("metals").commands()
+        end,
+        desc = "Metals commands"
+      }
+    },
     opts = function()
       local metals_config = require("metals").bare_config()
 
