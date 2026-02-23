@@ -100,15 +100,6 @@ return {
   },
 
   {
-    "nvim-telescope/telescope.nvim",
-    opts = function(_, opts)
-      opts.defaults.layout_config = { prompt_position = "top", width = 0.67 }
-      opts.defaults.layout_strategy = "center"
-      opts.defaults.sorting_strategy = "ascending"
-    end,
-  },
-
-  {
     "nvim-neo-tree/neo-tree.nvim",
     dependencies = {
       "s1n7ax/nvim-window-picker",
