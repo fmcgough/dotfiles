@@ -35,7 +35,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "catppuccin",
+      colorscheme = "catppuccin-latte",
     },
     keys = {
       { "<leader>w", "<cmd>w<cr>", desc = "Write file" },

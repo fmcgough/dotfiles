@@ -38,6 +38,10 @@ return {
         sbtScript = "/opt/homebrew/bin/sbt",
       }
 
+      metals_config.on_attach = function(client, bufnr)
+        require("metals").setup_dap()
+      end
+
       return metals_config
     end,
 
